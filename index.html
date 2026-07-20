@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honors Precalculus | Final Exam Review</title>
+    <meta name="description" content="A complete Honors Precalculus final exam review with guided notes, interactive graphs, 108 worked questions, and the exam formula sheet.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <link rel="stylesheet" href="styles.css?v=precalculus-1">
+</head>
+<body>
+    <a class="skip-link" href="#lesson-content-container">Skip to lesson content</a>
+    <div class="bg-blur-container"></div>
+    <div class="bg-tint-overlay"></div>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="logo-text">Pre<span class="logo-highlight">calculus</span></span>
+            </div>
+            <nav class="sidebar-menu" aria-label="Main navigation">
+                <a href="#" class="menu-item active" data-target="home-screen">
+                    <span class="menu-icon" aria-hidden="true">01</span> Dashboard
+                </a>
+                <a href="#" class="menu-item" data-target="review-screen">
+                    <span class="menu-icon" aria-hidden="true">02</span> Guided Notes
+                </a>
+                <a href="#" class="menu-item" data-target="practice-screen">
+                    <span class="menu-icon" aria-hidden="true">03</span> Practice Quiz
+                </a>
+                <a href="#" class="menu-item" data-target="profile-screen">
+                    <span class="menu-icon" aria-hidden="true">04</span> Progress
+                </a>
+            </nav>
+            <div class="sidebar-footer" id="sync-status" data-status="starting" aria-live="polite">
+                <div class="sync-status-heading">
+                    <span class="sync-status-dot" aria-hidden="true"></span>
+                    <p id="sync-status-title">Saved on this device</p>
+                </div>
+                <p id="sync-status-detail">Preparing cloud sync</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div>
+                    <span class="top-header-kicker">Honors Precalculus final review</span>
+                    <h1 id="screen-title">Dashboard</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="user-stats-pill" aria-label="Experience points">
+                        <span class="pill-label">XP</span>
+                        <span id="user-xp" class="pill-val">0</span>
+                    </div>
+                    <button id="account-button" class="account-button" type="button" disabled>
+                        <span id="account-avatar" class="account-avatar" aria-hidden="true">G</span>
+                        <span class="account-copy">
+                            <strong id="account-name">Sign in with Google</strong>
+                            <small id="account-sync-label">Sync phone, PC, and more</small>
+                        </span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="screen-wrapper" tabindex="0" role="region" aria-label="Main content">
+                <section id="home-screen" class="screen-content active">
+                    <div class="welcome-banner">
+                        <div class="welcome-copy">
+                            <span class="eyebrow">Everything from the supplied final review</span>
+                            <h2>Know what to do before you calculate.</h2>
+                            <p>Learn each idea with guided notes, test it in an interactive sandbox, then work through all 108 final-review questions with instant explanations.</p>
+                            <div class="coverage-pills" aria-label="Course coverage">
+                                <span><strong id="course-unit-count">9</strong> units</span>
+                                <span><strong id="course-lesson-count">29</strong> guided lessons</span>
+                                <span><strong id="course-question-count">108</strong> review questions</span>
+                            </div>
+                        </div>
+                        <div class="welcome-callout">
+                            <span class="callout-label">Exam note</span>
+                            <strong>The formula sheet is provided</strong>
+                            <span>Practice choosing formulas—not memorizing the provided page.</span>
+                        </div>
+                    </div>
+
+                    <section class="exam-resources glass-panel" aria-labelledby="exam-resources-heading">
+                        <div class="resource-copy">
+                            <span class="eyebrow">Source packet</span>
+                            <h3 id="exam-resources-heading">Exam resources</h3>
+                            <p>The formula sheet is provided during the exam. The review and key are included here for side-by-side checking.</p>
+                        </div>
+                        <div class="resource-links">
+                            <a class="btn btn-accent" href="resources/precalculus-formula-sheet.pdf" target="_blank" rel="noopener">Open formula sheet</a>
+                            <a class="btn btn-secondary" href="resources/precalculus-final-review.pdf" target="_blank" rel="noopener">Original review</a>
+                            <a class="btn btn-secondary" href="resources/precalculus-final-review-key.pdf" target="_blank" rel="noopener">Answer key</a>
+                        </div>
+                    </section>
+
+                    <div class="stats-overview-grid">
+                        <div class="stat-card">
+                            <h3>Course completion</h3>
+                            <div class="progress-ring-container">
+                                <svg class="progress-ring" width="120" height="120" aria-hidden="true">
+                                    <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                    <circle id="global-progress-circle" class="progress-ring-bar" stroke="url(#accent-gradient)" stroke-width="8" stroke-dasharray="314.16" stroke-dashoffset="314.16" fill="transparent" r="50" cx="60" cy="60"/>
+                                </svg>
+                                <div class="progress-ring-text" id="global-progress-percent">0%</div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3>Practice accuracy</h3>
+                            <div class="accuracy-score" id="global-accuracy">-</div>
+                            <p class="stat-subtitle" id="global-accuracy-label">No practice yet</p>
+                        </div>
+
+                        <div class="stat-card recommend-card">
+                            <h3>Strongest unit</h3>
+                            <p class="topic-indicator strong-topic" id="strongest-topic">No practice yet</p>
+                            <h3>Focus next</h3>
+                            <p class="topic-indicator weak-topic" id="weakest-topic">No practice yet</p>
+                        </div>
+                    </div>
+
+                    <section class="starred-review-section" aria-labelledby="starred-review-heading">
+                        <div class="section-heading-row starred-heading-row">
+                            <div>
+                                <span class="eyebrow">Saved by you</span>
+                                <h3 id="starred-review-heading" class="section-heading">Starred for review</h3>
+                            </div>
+                            <span id="starred-lessons-count" class="starred-lessons-count">0 lessons</span>
+                        </div>
+                        <div id="starred-lessons-grid" class="starred-lessons-grid"></div>
+                    </section>
+
+                    <div class="section-heading-row">
+                        <div>
+                            <span class="eyebrow">The full course</span>
+                            <h3 class="section-heading">Curriculum progress</h3>
+                        </div>
+                        <p class="section-helper">Open a unit to start its guided notes.</p>
+                    </div>
+                    <div id="unit-grid" class="unit-grid"></div>
+                </section>
+
+                <section id="review-screen" class="screen-content" aria-labelledby="screen-title">
+                    <div class="review-layout">
+                        <div class="lessons-panel glass-panel lesson-page-shell">
+                            <div class="panel-header review-panel-header">
+                                <div>
+                                    <span class="eyebrow">Learn at your pace</span>
+                                    <h3>Guided notes</h3>
+                                </div>
+                                <span class="badge" id="lesson-level-badge">Start here</span>
+                            </div>
+                            <div class="review-selectors">
+                                <label>
+                                    <span>Unit</span>
+                                    <select id="review-unit-select" class="theme-select select-block"></select>
+                                </label>
+                                <label>
+                                    <span>Lesson</span>
+                                    <select id="review-lesson-select" class="theme-select select-block"></select>
+                                </label>
+                            </div>
+                            <div class="unit-overview-card" id="unit-overview-container"></div>
+                            <nav class="lesson-map" id="lesson-map-container" aria-label="Lessons in this unit"></nav>
+                            <div class="lesson-navigation">
+                                <button id="btn-previous-lesson" class="btn btn-small btn-secondary" type="button">Previous</button>
+                                <span id="lesson-progress-text" aria-live="polite">Lesson 1 of 1</span>
+                                <button id="btn-next-lesson" class="btn btn-small btn-accent" type="button">Next lesson</button>
+                            </div>
+                            <div class="lesson-content-body" id="lesson-content-container" tabindex="-1"></div>
+                        </div>
+
+                        <div class="sandbox-panel glass-panel">
+                            <div class="panel-header">
+                                <div>
+                                    <span class="eyebrow">See it move</span>
+                                    <h3>Interactive sandbox</h3>
+                                </div>
+                                <span class="badge" id="sandbox-badge">Unit 1</span>
+                            </div>
+                            <p class="sandbox-intro" id="sandbox-intro">Change a value and watch the graph respond.</p>
+                            <div class="sandbox-canvas-container">
+                                <canvas id="sandbox-canvas" width="450" height="400" aria-label="Interactive mathematics graph"></canvas>
+                                <div class="sandbox-controls" id="sandbox-controls-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="practice-screen" class="screen-content">
+                    <div id="quiz-setup-panel" class="glass-panel centered-panel">
+                        <span class="eyebrow">Practice what you just learned</span>
+                        <h2>Start a practice session</h2>
+                        <p>Select one unit for focused practice, or work through the complete 108-question Precalculus review. Every answer includes a plain-language explanation.</p>
+                        <div class="form-group">
+                            <label for="quiz-mode-select">Choose a focus:</label>
+                            <select id="quiz-mode-select" class="theme-select select-block">
+                                <option value="cumulative">Complete final review (all Precalculus)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quiz-length-select">Session length:</label>
+                            <select id="quiz-length-select" class="theme-select select-block">
+                                <option value="all">Full bank</option>
+                                <option value="quick">Quick review (16 questions)</option>
+                            </select>
+                        </div>
+                        <p id="practice-bank-note" class="form-hint practice-bank-note" aria-live="polite">The full bank is selected by default; choose Quick review for a shorter session.</p>
+                        <button id="btn-start-quiz" class="btn btn-primary">Start practice</button>
+                        <p class="form-hint">Tip: read the explanation after every question, even when you are correct.</p>
+                    </div>
+
+                    <div id="quiz-runner-panel" class="glass-panel" style="display: none;">
+                        <div class="quiz-progress-header">
+                            <span id="quiz-progress-text">Question 1</span>
+                            <div class="progress-bar-bg" role="progressbar" aria-label="Quiz progress">
+                                <div id="quiz-progress-fill" class="progress-bar-fill" style="width: 1.05%;"></div>
+                            </div>
+                        </div>
+                        <div class="quiz-question-card">
+                            <div class="question-meta">
+                                <span id="question-topic-label" class="question-topic-tag">Core skill</span>
+                                <span id="question-difficulty-label" class="question-difficulty-tag">Core</span>
+                                <span id="question-source-label" class="question-source-tag" hidden>Final review</span>
+                                <button id="btn-star-question" class="question-star-button" type="button" aria-pressed="false" aria-label="Star this question for review">
+                                    <span aria-hidden="true">☆</span>
+                                    <span class="question-star-label">Star question</span>
+                                </button>
+                            </div>
+                            <div class="question-text" id="question-text-content"></div>
+                            <div class="options-container" id="question-options-container"></div>
+                        </div>
+                        <div class="quiz-footer-actions">
+                            <button id="btn-submit-answer" class="btn btn-primary" disabled>Submit answer</button>
+                            <button id="btn-next-question" class="btn btn-accent" style="display: none;">Next question</button>
+                        </div>
+                        <div class="explanation-box" id="question-explanation-box" style="display: none;">
+                            <h4 id="question-feedback-heading">Worked solution</h4>
+                            <div class="explanation-content" id="question-explanation-content"></div>
+                        </div>
+                    </div>
+
+                    <div id="quiz-summary-panel" class="glass-panel centered-panel" style="display: none;">
+                        <span class="eyebrow">Practice complete</span>
+                        <h2>Nice work finishing the session.</h2>
+                        <div class="summary-score-large" id="summary-score-display">8/10</div>
+                        <p class="summary-score-percent" id="summary-percent-display">80% accuracy</p>
+                        <div class="xp-earned-banner"><span class="xp-star" aria-hidden="true">+</span> Earned <strong id="summary-xp-display">80</strong> XP</div>
+                        <div class="summary-actions">
+                            <button id="btn-quiz-retry" class="btn btn-primary">Try another quiz</button>
+                            <button id="btn-quiz-goto-review" class="btn btn-secondary">Review lessons</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="profile-screen" class="screen-content">
+                    <div class="diagnostics-grid">
+                        <div class="glass-panel stats-list-panel">
+                            <span class="eyebrow">Your learning record</span>
+                            <h2>Performance summary</h2>
+                            <div class="stat-row"><span>Quizzes completed</span><strong id="diag-quizzes-count">0</strong></div>
+                            <div class="stat-row"><span>Total questions answered</span><strong id="diag-questions-count">0</strong></div>
+                            <div class="stat-row"><span>Correct answers</span><strong id="diag-correct-count">0</strong></div>
+                            <div class="stat-row"><span>Total XP</span><strong id="diag-xp-count">0</strong></div>
+                            <div class="learning-note"><strong>How mastery works</strong><span>Each unit percentage is based on the questions you have actually answered in that unit.</span></div>
+                        </div>
+                        <div class="glass-panel diagnostic-radar-panel">
+                            <span class="eyebrow">Find your next review</span>
+                            <h2>Unit mastery</h2>
+                            <div id="topic-diagnostics-list"></div>
+                            <div class="reset-data-container"><button id="btn-reset-data" class="btn btn-danger">Reset all progress</button></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <linearGradient id="accent-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00F2FE" />
+            <stop offset="100%" stop-color="#4FACFE" />
+        </linearGradient>
+    </svg>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script type="module" src="data.js"></script>
+    <script type="module" src="interactive.js"></script>
+    <script type="module" src="review.js"></script>
+    <script type="module" src="practice.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
