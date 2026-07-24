@@ -1,12 +1,12 @@
 // Guided lesson and unit overview manager.
-import { precalculusData } from './data.js';
-import { initSandbox } from './interactive.js';
+import { precalculusData } from './data.js?v=precalculus-3';
+import { initSandbox } from './interactive.js?v=precalculus-3';
 import {
     isLessonStarred,
     markLessonViewed,
     subscribeProgress,
     toggleLessonStar
-} from './progress.js';
+} from './progress.js?v=precalculus-3';
 
 const sandboxDescriptions = {
     "unit-1": "Compare a rational function with its asymptotes and removable hole.",
@@ -22,13 +22,13 @@ const sandboxDescriptions = {
 
 const memoryAnchors = {
     "unit-1": ["Factor → restrict → cancel → classify", "Logs demand positive arguments"],
-    "unit-2": ["$(\cos\theta,\sin\theta)$", "$360^\circ=2\pi$"],
-    "unit-3": ["Rewrite → factor → solve every case", "$\sin^2x+\cos^2x=1$"],
-    "unit-4": ["Family → period → shift → reflection", "$P_{\sin,\cos}=2\pi/|b|$"],
+    "unit-2": ["$(\\cos\\theta,\\sin\\theta)$", "$360^\\circ=2\\pi$"],
+    "unit-3": ["Rewrite → factor → solve every case", "$\\sin^2x+\\cos^2x=1$"],
+    "unit-4": ["Family → period → shift → reflection", "$P_{\\sin,\\cos}=2\\pi/|b|$"],
     "unit-5": ["SSS/SAS: cosine; opposite pair: sine", "SSA can make 0, 1, or 2 triangles"],
-    "unit-6": ["$a+bi\leftrightarrow(a,b)$", "Order matters? permutation : combination"],
+    "unit-6": ["$a+bi\\leftrightarrow(a,b)$", "Order matters? permutation : combination"],
     "unit-7": ["Difference → arithmetic; ratio → geometric", "$|r|<1$ for an infinite sum"],
-    "unit-8": ["$x=r\cos\theta,\ y=r\sin\theta$", "Keep restrictions after eliminating $t$"],
+    "unit-8": ["$x=r\\cos\\theta,\\ y=r\\sin\\theta$", "Keep restrictions after eliminating $t$"],
     "unit-9": ["$0/0$ means simplify", "Point from $f$; slope from $f'$" ]
 };
 
@@ -213,7 +213,8 @@ export function initReviewPanel({
         if (typeof window.renderMathInElement !== 'function') return;
         window.renderMathInElement(container, {
             delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }],
-            throwOnError: false
+            throwOnError: false,
+            strict: 'ignore'
         });
     }
 

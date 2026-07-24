@@ -1,11 +1,11 @@
 // Practice section and quiz engine.
-import { precalculusData } from './data.js';
+import { precalculusData } from './data.js?v=precalculus-3';
 import {
     isQuestionStarred,
     recordQuizResult,
     subscribeProgress,
     toggleQuestionStar
-} from './progress.js';
+} from './progress.js?v=precalculus-3';
 
 export function initPracticePanel(elems, onStatsUpdate) {
     let currentQuestions = [];
@@ -259,7 +259,8 @@ export function initPracticePanel(elems, onStatsUpdate) {
                 { left: '$$', right: '$$', display: true },
                 { left: '$', right: '$', display: false }
             ],
-            throwOnError: false
+            throwOnError: false,
+            strict: 'ignore'
         });
     }
 }

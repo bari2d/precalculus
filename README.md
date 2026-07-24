@@ -2,6 +2,8 @@
 
 A standalone static study site modeled on the sibling `algebra-2` project. It includes:
 
+**Live site:** https://bari2d.github.io/precalculus/
+
 - 9 curriculum units and 29 guided lessons
 - 9 interactive canvas sandboxes
 - All 108 questions from the supplied final-review packet

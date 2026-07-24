@@ -1,7 +1,7 @@
 // Main Application Controller Module
-import { precalculusData } from './data.js';
-import { initReviewPanel } from './review.js';
-import { initPracticePanel } from './practice.js';
+import { precalculusData } from './data.js?v=precalculus-3';
+import { initReviewPanel } from './review.js?v=precalculus-3';
+import { initPracticePanel } from './practice.js?v=precalculus-3';
 import {
     getProgressState,
     getStats,
@@ -13,7 +13,7 @@ import {
     signOutProgress,
     subscribeProgress,
     subscribeSyncState
-} from './progress.js';
+} from './progress.js?v=precalculus-3';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Navigation / Routing DOM Elements

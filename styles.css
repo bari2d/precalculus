@@ -483,6 +483,9 @@ body {
 }
 
 .theme-select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
     background-color: #0b0d14;
     border: 1px solid var(--border-glass);
     color: var(--text-primary);
@@ -1109,6 +1112,7 @@ body {
 
 .review-selectors label {
     display: flex;
+    min-width: 0;
     flex-direction: column;
     gap: 7px;
     color: var(--text-muted);
@@ -2364,6 +2368,83 @@ html {
     color: #fff;
     font: 700 clamp(16px, 2vw, 25px)/1.35 var(--font-heading);
     text-align: center;
+}
+
+/* Math layout repair: keep long review expressions inside their cards while
+   preserving a comfortable line height for surrounding prose. */
+.question-text,
+.option-btn,
+.explanation-content,
+.lesson-body-copy,
+.lesson-glossary dd,
+.memory-formula-art {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.question-text .katex,
+.option-btn .katex,
+.explanation-content .katex,
+.lesson-body-copy .katex,
+.lesson-glossary .katex,
+.memory-formula-art .katex {
+    max-width: 100%;
+    word-break: normal;
+}
+
+.question-text > .katex,
+.option-btn > .katex,
+.explanation-content > .katex,
+.memory-formula-art > .katex {
+    display: inline-block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    vertical-align: middle;
+}
+
+.question-text .katex-display,
+.option-btn .katex-display,
+.explanation-content .katex-display,
+.lesson-body-copy .katex-display,
+.memory-formula-art .katex-display {
+    max-width: 100%;
+    margin: 0.55em 0;
+    padding: 3px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    text-align: left;
+}
+
+.option-btn .katex-display > .katex,
+.question-text .katex-display > .katex,
+.explanation-content .katex-display > .katex {
+    text-align: left;
+}
+
+@media (max-width: 720px) {
+    .review-layout,
+    .lessons-panel,
+    .review-selectors,
+    .review-selectors label {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .question-text {
+        margin-bottom: 24px;
+        font-size: 17px;
+        line-height: 1.55;
+    }
+
+    .option-btn {
+        padding: 16px 18px;
+        line-height: 1.55;
+    }
+
+    .memory-formula-art {
+        min-height: 78px;
+        padding: 15px 12px;
+    }
 }
 
 @media (max-width: 720px) {
