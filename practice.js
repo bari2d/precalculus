@@ -1,11 +1,11 @@
 // Practice section and quiz engine.
-import { precalculusData } from './data.js?v=precalculus-3';
+import { precalculusData } from './data.js?v=precalculus-4';
 import {
     isQuestionStarred,
     recordQuizResult,
     subscribeProgress,
     toggleQuestionStar
-} from './progress.js?v=precalculus-3';
+} from './progress.js?v=precalculus-4';
 
 export function initPracticePanel(elems, onStatsUpdate) {
     let currentQuestions = [];
@@ -15,7 +15,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
     let answerLog = [];
     let latestProgress = { starredQuestions: [] };
 
-    elems.modeSelect.innerHTML = '<option value="cumulative">Complete final review (all Precalculus)</option>';
+    elems.modeSelect.innerHTML = '<option value="cumulative">Complete final review (packet order)</option>';
     const starredOption = document.createElement('option');
     starredOption.value = 'starred';
     starredOption.innerText = 'Starred questions (0)';
@@ -36,7 +36,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
     }
     const bankNote = document.getElementById('practice-bank-note');
     if (bankNote) {
-        bankNote.innerText = `Question bank: ${bankSize} questions across ${precalculusData.units.length} units. The full final review is selected by default; choose Quick review for a shorter session.`;
+        bankNote.innerText = `Question bank: ${bankSize} supplied review questions across ${precalculusData.units.length} study units. Full review follows packet order; Quick review is balanced and randomized.`;
     }
 
     elems.btnStart.addEventListener('click', () => startQuiz(elems.modeSelect.value, elems.lengthSelect?.value || 'all'));
@@ -76,6 +76,8 @@ export function initPracticePanel(elems, onStatsUpdate) {
                 : unitQuestions;
         }
 
+        currentQuestions = currentQuestions.map(randomizeAnswerOrder);
+
         if (currentQuestions.length === 0) {
             alert(mode === 'starred'
                 ? 'No questions are starred yet. Star a question during practice, then return here to review it.'
@@ -94,6 +96,9 @@ export function initPracticePanel(elems, onStatsUpdate) {
     }
 
     function buildBalancedCumulativeSet(limit = null) {
+        if (!limit) {
+            return allQuestions().sort((a, b) => sourceNumber(a) - sourceNumber(b));
+        }
         const firstQuestionFromEachUnit = precalculusData.units.map(unit => {
             const item = shuffle(unit.questions)[0];
             return item ? { ...item, unitId: unit.id } : null;
@@ -102,8 +107,24 @@ export function initPracticePanel(elems, onStatsUpdate) {
         const remaining = precalculusData.units.flatMap(unit => shuffle(unit.questions)
             .filter(item => !selectedIds.has(item.id))
             .map(item => ({ ...item, unitId: unit.id })));
-        const allQuestions = shuffle([...firstQuestionFromEachUnit, ...remaining]);
-        return limit ? allQuestions.slice(0, Math.min(limit, allQuestions.length)) : allQuestions;
+        const balancedQuestions = shuffle([...firstQuestionFromEachUnit, ...remaining]);
+        return limit ? balancedQuestions.slice(0, Math.min(limit, balancedQuestions.length)) : balancedQuestions;
+    }
+
+    function sourceNumber(question) {
+        return Number(question.source?.match(/#(\d+)/)?.[1] || Number.MAX_SAFE_INTEGER);
+    }
+
+    function randomizeAnswerOrder(question) {
+        const choices = shuffle(question.options.map((text, index) => ({
+            text,
+            correct: index === question.correctIndex
+        })));
+        return {
+            ...question,
+            options: choices.map(choice => choice.text),
+            correctIndex: choices.findIndex(choice => choice.correct)
+        };
     }
 
     function loadQuestion() {
@@ -116,7 +137,9 @@ export function initPracticePanel(elems, onStatsUpdate) {
             elems.questionTopic.innerText = currentQuestion.topic || 'Core skill';
         }
         if (elems.questionDifficulty) {
-            elems.questionDifficulty.innerText = currentQuestion.difficulty || 'Core';
+            const isHonors = currentQuestion.curriculumLevel === 'Honors';
+            elems.questionDifficulty.innerText = isHonors ? 'Honors topic' : (currentQuestion.difficulty || 'Core');
+            elems.questionDifficulty.classList.toggle('honors', isHonors);
         }
         if (elems.questionSource) {
             elems.questionSource.hidden = !currentQuestion.source;

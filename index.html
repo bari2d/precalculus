@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <link rel="stylesheet" href="styles.css?v=precalculus-3">
+    <link rel="stylesheet" href="styles.css?v=precalculus-4">
 </head>
 <body>
     <a class="skip-link" href="#lesson-content-container">Skip to lesson content</a>
@@ -68,12 +68,12 @@
                 <section id="home-screen" class="screen-content active">
                     <div class="welcome-banner">
                         <div class="welcome-copy">
-                            <span class="eyebrow">Everything from the supplied final review</span>
+                            <span class="eyebrow">Full 2024 curriculum + supplied final review</span>
                             <h2>Know what to do before you calculate.</h2>
-                            <p>Learn each idea with guided notes, test it in an interactive sandbox, then work through all 108 final-review questions with instant explanations.</p>
+                            <p>Learn every district curriculum topic with guided notes, then work through all 108 supplied final-review questions with instant explanations.</p>
                             <div class="coverage-pills" aria-label="Course coverage">
                                 <span><strong id="course-unit-count">9</strong> units</span>
-                                <span><strong id="course-lesson-count">29</strong> guided lessons</span>
+                                <span><strong id="course-lesson-count">49</strong> guided lessons</span>
                                 <span><strong id="course-question-count">108</strong> review questions</span>
                             </div>
                         </div>
@@ -88,12 +88,26 @@
                         <div class="resource-copy">
                             <span class="eyebrow">Source packet</span>
                             <h3 id="exam-resources-heading">Exam resources</h3>
-                            <p>The formula sheet is provided during the exam. The review and key are included here for side-by-side checking.</p>
+                            <p>The formula sheet is provided during the exam. The official curriculum, review, and key are included here for side-by-side checking.</p>
                         </div>
                         <div class="resource-links">
                             <a class="btn btn-accent" href="resources/precalculus-formula-sheet.pdf" target="_blank" rel="noopener">Open formula sheet</a>
+                            <a class="btn btn-secondary" href="resources/precalculus-curriculum-2024.pdf" target="_blank" rel="noopener">Official curriculum</a>
                             <a class="btn btn-secondary" href="resources/precalculus-final-review.pdf" target="_blank" rel="noopener">Original review</a>
                             <a class="btn btn-secondary" href="resources/precalculus-final-review-key.pdf" target="_blank" rel="noopener">Answer key</a>
+                        </div>
+                    </section>
+
+                    <section class="curriculum-alignment glass-panel" aria-labelledby="curriculum-alignment-heading">
+                        <div class="resource-copy">
+                            <span class="eyebrow">Checked against the official 2024 document</span>
+                            <h3 id="curriculum-alignment-heading">Core and Honors are now separated clearly</h3>
+                            <p>The district curriculum has 6 official units, reorganized here into 9 focused study units. Topics marked with an asterisk in the curriculum are labeled <strong>Honors</strong> throughout the notes and practice pages.</p>
+                        </div>
+                        <div class="alignment-facts" aria-label="Curriculum audit results">
+                            <span><strong>108 / 108</strong> packet questions included</span>
+                            <span><strong>Every topic</strong> mapped to guided notes</span>
+                            <span class="honors"><strong>Calculus</strong> is partly Core limits and partly Honors-only</span>
                         </div>
                     </section>
 
@@ -195,11 +209,11 @@
                     <div id="quiz-setup-panel" class="glass-panel centered-panel">
                         <span class="eyebrow">Practice what you just learned</span>
                         <h2>Start a practice session</h2>
-                        <p>Select one unit for focused practice, or work through the complete 108-question Precalculus review. Every answer includes a plain-language explanation.</p>
+                        <p>Select one unit for focused practice, or work through the complete 108-question Honors Precalculus review in the packet's original order. Every answer includes a plain-language explanation and a Core/Honors label.</p>
                         <div class="form-group">
                             <label for="quiz-mode-select">Choose a focus:</label>
                             <select id="quiz-mode-select" class="theme-select select-block">
-                                <option value="cumulative">Complete final review (all Precalculus)</option>
+                                <option value="cumulative">Complete final review (packet order)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -289,6 +303,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-    <script type="module" src="app.js?v=precalculus-3"></script>
+    <script type="module" src="app.js?v=precalculus-4"></script>
 </body>
 </html>

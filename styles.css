@@ -31,6 +31,100 @@
     --font-body: 'Inter', sans-serif;
 }
 
+/* Official-curriculum alignment and Core/Honors labels. */
+.curriculum-alignment {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    margin: -22px 0 40px;
+    padding: 24px 28px;
+    border-color: rgba(200, 168, 255, 0.18);
+    background: linear-gradient(135deg, rgba(157, 78, 221, 0.07), rgba(0, 245, 255, 0.035));
+}
+
+.alignment-facts {
+    display: grid;
+    min-width: min(100%, 360px);
+    gap: 8px;
+}
+
+.alignment-facts span,
+.curriculum-tags span,
+.unit-curriculum-meta span,
+.lesson-map-level {
+    border: 1px solid rgba(0, 245, 255, 0.18);
+    border-radius: 999px;
+    background: rgba(0, 245, 255, 0.055);
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 750;
+    line-height: 1.3;
+}
+
+.alignment-facts span {
+    padding: 9px 12px;
+}
+
+.alignment-facts strong {
+    color: var(--text-primary);
+}
+
+.alignment-facts .honors,
+.curriculum-tags .honors,
+.unit-curriculum-meta .honors,
+.lesson-map-level,
+.badge.honors,
+.question-meta .question-difficulty-tag.honors {
+    border-color: rgba(200, 168, 255, 0.3);
+    background: rgba(157, 78, 221, 0.1);
+    color: #d4b8ff;
+}
+
+.curriculum-tags,
+.unit-curriculum-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.curriculum-tags {
+    margin-top: 3px;
+}
+
+.curriculum-tags span,
+.unit-curriculum-meta span {
+    padding: 4px 8px;
+}
+
+.unit-curriculum-meta {
+    margin-top: 12px;
+}
+
+.lesson-map-title {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.lesson-map-level {
+    flex: 0 0 auto;
+    padding: 3px 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+}
+
+@media (max-width: 760px) {
+    .curriculum-alignment {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 21px;
+    }
+
+    .alignment-facts {
+        min-width: 0;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;

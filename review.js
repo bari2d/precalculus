@@ -1,12 +1,12 @@
 // Guided lesson and unit overview manager.
-import { precalculusData } from './data.js?v=precalculus-3';
-import { initSandbox } from './interactive.js?v=precalculus-3';
+import { precalculusData } from './data.js?v=precalculus-4';
+import { initSandbox } from './interactive.js?v=precalculus-4';
 import {
     isLessonStarred,
     markLessonViewed,
     subscribeProgress,
     toggleLessonStar
-} from './progress.js?v=precalculus-3';
+} from './progress.js?v=precalculus-4';
 
 const sandboxDescriptions = {
     "unit-1": "Compare a rational function with its asymptotes and removable hole.",
@@ -21,15 +21,15 @@ const sandboxDescriptions = {
 };
 
 const memoryAnchors = {
-    "unit-1": ["Factor → restrict → cancel → classify", "Logs demand positive arguments"],
-    "unit-2": ["$(\\cos\\theta,\\sin\\theta)$", "$360^\\circ=2\\pi$"],
-    "unit-3": ["Rewrite → factor → solve every case", "$\\sin^2x+\\cos^2x=1$"],
+    "unit-1": ["Domain first → features second", "Compose inside-out; reverse for inverses", "Factor → restrict → cancel → classify", "Logs demand positive arguments"],
+    "unit-2": ["$(\\cos\\theta,\\sin\\theta)$", "$360^\\circ=2\\pi$", "$s=r\\theta$ and $v=r\\omega$"],
+    "unit-3": ["Rewrite → factor → solve every case", "$\\sin^2x+\\cos^2x=1$", "Sum formulas build unfamiliar angles"],
     "unit-4": ["Family → period → shift → reflection", "$P_{\\sin,\\cos}=2\\pi/|b|$"],
-    "unit-5": ["SSS/SAS: cosine; opposite pair: sine", "SSA can make 0, 1, or 2 triangles"],
-    "unit-6": ["$a+bi\\leftrightarrow(a,b)$", "Order matters? permutation : combination"],
+    "unit-5": ["SSS/SAS: cosine; opposite pair: sine", "SSA can make 0, 1, or 2 triangles", "Area: included angle or semiperimeter"],
+    "unit-6": ["$a+bi\\leftrightarrow(a,b)$", "Order matters? permutation : combination", "Union subtracts overlap; independence multiplies"],
     "unit-7": ["Difference → arithmetic; ratio → geometric", "$|r|<1$ for an infinite sum"],
-    "unit-8": ["$x=r\\cos\\theta,\\ y=r\\sin\\theta$", "Keep restrictions after eliminating $t$"],
-    "unit-9": ["$0/0$ means simplify", "Point from $f$; slope from $f'$" ]
+    "unit-8": ["Standard form reveals the conic", "$x=r\\cos\\theta,\\ y=r\\sin\\theta$", "Keep restrictions after eliminating $t$"],
+    "unit-9": ["Left limit = right limit → two-sided limit", "Difference quotient → tangent slope", "$0/0$ means simplify", "Point from $f$; slope from $f'$" ]
 };
 
 export function initReviewPanel({
@@ -91,6 +91,10 @@ export function initReviewPanel({
             <div class="overview-heading">
                 <span class="eyebrow">Unit snapshot</span>
                 <strong>${unit.overview}</strong>
+                <div class="curriculum-tags" aria-label="Curriculum alignment">
+                    <span>${unit.curriculumUnit || 'Official curriculum'}</span>
+                    <span class="${unit.curriculumLevel?.toLowerCase().includes('honors') ? 'honors' : ''}">${unit.curriculumLevel || 'Core'}</span>
+                </div>
             </div>
             <div class="overview-columns">
                 <div>
@@ -114,6 +118,7 @@ export function initReviewPanel({
                     <button type="button" class="lesson-map-button${isLessonStarred(unit.id, index) ? ' starred' : ''}" data-lesson-index="${index}">
                         <span class="lesson-map-number">${index + 1}</span>
                         <span class="lesson-map-title">${withoutNumber(currentLesson.title)}</span>
+                        ${currentLesson.level === 'Honors' ? '<span class="lesson-map-level">Honors</span>' : ''}
                         <span class="lesson-map-star" aria-hidden="true"${isLessonStarred(unit.id, index) ? '' : ' hidden'}>★</span>
                     </button>
                 </li>
@@ -131,7 +136,8 @@ export function initReviewPanel({
         const starred = isLessonStarred(currentUnit.id, index);
         lessonSelect.value = String(index);
         lessonProgress.innerText = `Lesson ${index + 1} of ${currentUnit.lessons.length}`;
-        lessonLevelBadge.innerText = index === 0 ? 'Start here' : `Core skill ${index + 1}`;
+        lessonLevelBadge.innerText = currentLesson.level === 'Honors' ? 'Honors' : 'Core';
+        lessonLevelBadge.classList.toggle('honors', currentLesson.level === 'Honors');
         previousButton.disabled = index === 0;
         nextButton.disabled = index === currentUnit.lessons.length - 1;
         nextButton.innerText = index === currentUnit.lessons.length - 1 ? 'Last lesson' : 'Next lesson';

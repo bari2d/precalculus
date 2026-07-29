@@ -1,7 +1,7 @@
 // Main Application Controller Module
-import { precalculusData } from './data.js?v=precalculus-3';
-import { initReviewPanel } from './review.js?v=precalculus-3';
-import { initPracticePanel } from './practice.js?v=precalculus-3';
+import { precalculusData } from './data.js?v=precalculus-4';
+import { initReviewPanel } from './review.js?v=precalculus-4';
+import { initPracticePanel } from './practice.js?v=precalculus-4';
 import {
     getProgressState,
     getStats,
@@ -13,7 +13,7 @@ import {
     signOutProgress,
     subscribeProgress,
     subscribeSyncState
-} from './progress.js?v=precalculus-3';
+} from './progress.js?v=precalculus-4';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Navigation / Routing DOM Elements
@@ -213,6 +213,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="unit-badge">${unit.id.toUpperCase().replace('-', ' ')}</span>
                     <h4>${unit.title}</h4>
                     <p>${unit.subtitle}</p>
+                    <div class="unit-curriculum-meta">
+                        <span>${unit.curriculumUnit || 'Official curriculum'}</span>
+                        <span class="${unit.curriculumLevel?.toLowerCase().includes('honors') ? 'honors' : ''}">${unit.curriculumLevel || 'Core'}</span>
+                    </div>
                 </div>
                 <div class="progress-ring-container">
                     <svg width="60" height="60">

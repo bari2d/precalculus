@@ -2,6 +2,7 @@
 // The review questions are adapted from the supplied 108-question packet.
 
 const definitions = {
+    "Function fundamentals": "A function assigns exactly one output to each allowed input; its domain is the set of allowed inputs and its range is the set of outputs.",
     "Zeros and multiplicity": "A zero makes a function equal to zero. Its multiplicity is the exponent on the corresponding factor.",
     "Rational functions": "A rational function is a quotient of polynomials; denominator zeros create restrictions.",
     "Exponential functions": "An exponential function has its variable in an exponent.",
@@ -14,6 +15,7 @@ const definitions = {
     "Complex numbers": "A complex number $a+bi$ corresponds to the point $(a,b)$ and has modulus $\\sqrt{a^2+b^2}$.",
     "Binomial theorem": "The Binomial Theorem uses combination coefficients to expand $(a+b)^n$.",
     "Counting and probability": "Permutations count ordered choices; combinations count unordered choices.",
+    "Conic sections": "Circles, parabolas, ellipses, and hyperbolas are curves formed by slicing a double cone.",
     "Sequences": "A sequence is an ordered list; arithmetic sequences have a common difference and geometric sequences have a common ratio.",
     "Series": "A series is a sum of sequence terms.",
     "Parametric equations": "Parametric equations express both $x$ and $y$ in terms of a third variable.",
@@ -22,12 +24,16 @@ const definitions = {
     "Derivatives": "A derivative is an instantaneous rate of change and the slope of a tangent line."
 };
 
-const lesson = (title, purpose, content, takeaways) => ({ title, purpose, content, takeaways });
-const question = (id, topic, text, options, correctIndex, explanation, difficulty = "Final review", source = "") => ({
-    id, topic, text, options, correctIndex, explanation, difficulty, source, definition: definitions[topic] || ""
+const lesson = (title, purpose, content, takeaways, level = "Core") => ({ title, purpose, content, takeaways, level });
+const honorsReviewNumbers = new Set([
+    30, 35, 36, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67,
+    80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 104, 105
+]);
+const question = (id, topic, text, options, correctIndex, explanation, difficulty = "Final review", source = "", curriculumLevel = "Core") => ({
+    id, topic, text, options, correctIndex, explanation, difficulty, source, curriculumLevel, definition: definitions[topic] || ""
 });
 const rq = (unit, number, topic, text, options, correctIndex, explanation, difficulty = "Final review") =>
-    question(`q${unit}_${number}`, topic, text, options, correctIndex, explanation, difficulty, `Final review #${number}`);
+    question(`q${unit}_${number}`, topic, text, options, correctIndex, explanation, difficulty, `Final review #${number}`, honorsReviewNumbers.has(number) ? "Honors" : "Core");
 
 const note = (title, body) => `<div class="example-box"><h4>${title}</h4>${body}</div>`;
 const warn = body => `<div class="mistake-box"><strong>Common mix-up:</strong> ${body}</div>`;
@@ -37,13 +43,20 @@ export const precalculusData = {
     title: "Honors Precalculus",
     subtitle: "Final exam review, guided notes, interactives, and worked practice",
     reference: "Built from the supplied Honors Precalculus final review, answer key, and exam-provided formula sheet.",
+    curriculum: {
+        title: "Precalculus and Honors Precalculus Curriculum - Grades 10-12 - 2024",
+        officialUnits: 6,
+        note: "The district marks Honors-only content with an asterisk. This site labels the same material as Honors."
+    },
     units: [
         {
             id: "unit-1",
             title: "Functions, Rational Models, Exponents & Logs",
-            subtitle: "End behavior, asymptotes, holes, logarithms, and equations",
-            overview: "Read the structure of polynomial, rational, exponential, and logarithmic functions, then solve logarithmic and exponential equations with domain checks.",
-            essentialQuestions: ["How do factors predict zeros and end behavior?", "How do denominator factors create asymptotes and holes?", "How are exponential and logarithmic forms connected?", "When does algebra create an extraneous logarithmic solution?"],
+            subtitle: "Function foundations, polynomials, rational functions, exponentials, and logarithms",
+            curriculumUnit: "Official Units I-II",
+            curriculumLevel: "Core + Honors",
+            overview: "Analyze, transform, combine, and invert functions; then connect quadratic, polynomial, rational, exponential, and logarithmic forms to their graphs and models.",
+            essentialQuestions: ["How do domain, range, symmetry, and transformations describe a function?", "How do composition and inverses connect functions?", "How do factors and polynomial theorems predict zeros and end behavior?", "How do rational, exponential, and logarithmic forms encode restrictions and models?"],
             vocabulary: [["Multiplicity", "The number of times a zero's factor occurs."], ["End behavior", "What $f(x)$ approaches as $x\\to\\infty$ or $x\\to-\\infty$."], ["Hole", "A removable discontinuity caused by a canceled factor."], ["Asymptote", "A line a graph approaches."], ["Logarithm", "The inverse operation of exponentiation."], ["Extraneous solution", "A proposed answer that fails the original equation or its domain."]],
             lessons: [
                 lesson("1. Polynomial zeros and end behavior", "Read a factored polynomial before doing any expansion.", `
@@ -80,8 +93,10 @@ export const precalculusData = {
             id: "unit-2",
             title: "Trig Foundations & the Unit Circle",
             subtitle: "Angles, exact values, inverse trig, ranges, and applications",
-            overview: "Move fluently between degrees and radians, use quadrant signs and reference angles, evaluate inverse trig, and model right-triangle situations.",
-            essentialQuestions: ["How does the unit circle encode sine and cosine?", "How do reference angles give exact trig values?", "Why do inverse trig functions use restricted ranges?", "How do angle of elevation and depression create triangles?"],
+            curriculumUnit: "Official Unit III",
+            curriculumLevel: "Core",
+            overview: "Move fluently between degrees and radians, connect circular motion to arc length, use exact trig values and inverse trig, and model right-triangle situations.",
+            essentialQuestions: ["How does the unit circle encode sine and cosine?", "How are radian measure, arc length, and angular speed connected?", "Why do inverse trig functions use restricted ranges?", "How do angle of elevation and depression create triangles?"],
             vocabulary: [["Radian", "An angle measure based on arc length over radius."], ["Reference angle", "The acute angle between a terminal side and the $x$-axis."], ["Coterminal", "Angles with the same terminal side."], ["Inverse trig", "A function returning a principal angle from a trig ratio."], ["Amplitude", "Half the distance from a sinusoid's maximum to minimum."], ["Angle of depression", "An angle measured downward from a horizontal line."]],
             lessons: [
                 lesson("1. Degrees, radians, and the unit circle", "Convert angle units and locate terminal sides.", `
@@ -114,8 +129,10 @@ export const precalculusData = {
             id: "unit-3",
             title: "Trig Identities & Equations",
             subtitle: "Pythagorean identities, simplification, and multi-step solving",
-            overview: "Use the exam-provided identities strategically, simplify complex trig expressions, and solve equations after factoring or rewriting into one trig function.",
-            essentialQuestions: ["Which identity changes the expression into a factorable form?", "How do common denominators expose an identity?", "How do substitutions such as $\\tan^2x=\\sec^2x-1$ help?"],
+            curriculumUnit: "Official Unit III",
+            curriculumLevel: "Core + Honors",
+            overview: "Use fundamental, sum/difference, and multiple-angle identities to simplify, verify, evaluate, and solve trigonometric expressions and equations.",
+            essentialQuestions: ["Which identity changes the expression into a useful form?", "How is an identity verified without solving it?", "How do sum, difference, double-angle, and half-angle formulas create exact values?", "How do factoring and interval checks produce every solution?"],
             vocabulary: [["Pythagorean identity", "One of the three identities derived from $\\sin^2x+\\cos^2x=1$."], ["Reciprocal identity", "An identity connecting sine/cosine with cosecant/secant."], ["Factor", "A quantity multiplied by another; a zero product creates cases."], ["General solution", "A family of all periodic solutions."], ["Restricted interval", "The exact window in which answers must be listed."]],
             lessons: [
                 lesson("1. Identity toolkit", "Recognize reciprocal, quotient, and Pythagorean forms.", `
@@ -140,8 +157,10 @@ export const precalculusData = {
             id: "unit-4",
             title: "Trigonometric Graphs",
             subtitle: "Sine, cosine, tangent, cotangent, secant, and transformations",
-            overview: "Read equations from graphs and graphs from equations using period, phase shift, midline, amplitude, zeros, and asymptotes.",
-            essentialQuestions: ["How does the coefficient of $x$ change period?", "How does an inside shift move key points and asymptotes?", "How are secant and cosecant built from cosine and sine?"],
+            curriculumUnit: "Official Unit III",
+            curriculumLevel: "Core",
+            overview: "Read equations from graphs and graphs from equations using period, phase shift, midline, amplitude, zeros, and asymptotes, then build sinusoidal models.",
+            essentialQuestions: ["How does the coefficient of $x$ change period?", "How does an inside shift move key points and asymptotes?", "How are secant and cosecant built from cosine and sine?", "How do extrema and cycle time determine a periodic model?"],
             vocabulary: [["Amplitude", "$|a|$ in $a\\sin(b(x-h))+k$ or $a\\cos(b(x-h))+k$."], ["Period", "$2\\pi/|b|$ for sine/cosine and $\\pi/|b|$ for tangent/cotangent."], ["Phase shift", "The horizontal shift $h$."], ["Midline", "The horizontal center line $y=k$."], ["Vertical asymptote", "A vertical line approached by tangent, cotangent, secant, or cosecant branches."]],
             lessons: [
                 lesson("1. Sine and cosine transformations", "Plot five key points per cycle.", `
@@ -164,8 +183,10 @@ export const precalculusData = {
             id: "unit-5",
             title: "Oblique Triangles",
             subtitle: "Law of Sines, Law of Cosines, and the ambiguous case",
-            overview: "Solve non-right triangles from SSS, SAS, ASA/AAS, or SSA data and decide whether zero, one, or two triangles exist.",
-            essentialQuestions: ["Which law matches the information given?", "Why can SSA produce two triangles?", "How do angle and side checks reject impossible triangles?"],
+            curriculumUnit: "Official Unit III",
+            curriculumLevel: "Core",
+            overview: "Solve non-right triangles from SSS, SAS, ASA/AAS, or SSA data, decide whether zero, one, or two triangles exist, and find area from SAS or SSS information.",
+            essentialQuestions: ["Which law matches the information given?", "Why can SSA produce two triangles?", "How do angle and side checks reject impossible triangles?", "When should area use sine or Heron's Formula?"],
             vocabulary: [["Included angle", "The angle between two known sides."], ["SSA", "Two sides and a non-included angle; the ambiguous case."], ["SAS", "Two sides and their included angle."], ["Law of Sines", "$a/\\sin A=b/\\sin B=c/\\sin C$."], ["Law of Cosines", "$c^2=a^2+b^2-2ab\\cos C$."]],
             lessons: [
                 lesson("1. Choosing a triangle law", "Match the method to the known parts.", `
@@ -184,8 +205,10 @@ export const precalculusData = {
             id: "unit-6",
             title: "Complex Numbers, Binomials & Probability",
             subtitle: "Polar form, sigma notation, combinations, and binomial probability",
-            overview: "Represent complex numbers geometrically, expand binomials with combinations, evaluate factorial expressions, and choose counting or probability models.",
-            essentialQuestions: ["How does a complex point become polar form?", "How do binomial coefficients locate a requested term?", "When does order matter?", "How does a binomial probability combine choices and success rates?"],
+            curriculumUnit: "Official Units III-IV",
+            curriculumLevel: "Core + Honors",
+            overview: "Represent and operate on complex numbers, expand binomials, evaluate factorial expressions, and distinguish counting, general probability, and binomial probability models.",
+            essentialQuestions: ["How do rectangular and polar forms simplify different complex operations?", "How do binomial coefficients locate a requested term?", "When does order matter?", "How are complements, unions, intersections, and independence different?"],
             vocabulary: [["Modulus", "Distance of a complex number from the origin."], ["Argument", "The angle of a complex number in the plane."], ["Trigonometric form", "$r(\\cos\\theta+i\\sin\\theta)$."], ["Combination", "An unordered selection."], ["Permutation", "An ordered arrangement."], ["Binomial probability", "$\\binom nkp^k(1-p)^{n-k}$."]],
             lessons: [
                 lesson("1. Complex numbers in polar form", "Use a triangle and quadrant to find modulus and argument.", `
@@ -209,6 +232,8 @@ export const precalculusData = {
             id: "unit-7",
             title: "Sequences & Series",
             subtitle: "Arithmetic, geometric, recursive, finite, and infinite sums",
+            curriculumUnit: "Official Unit IV",
+            curriculumLevel: "Core",
             overview: "Recognize arithmetic and geometric patterns, move between recursive and explicit rules, and sum finite or convergent infinite series.",
             essentialQuestions: ["Is the pattern driven by a difference or ratio?", "How does an explicit rule encode the first term?", "When does an infinite geometric series converge?"],
             vocabulary: [["Arithmetic sequence", "A sequence with a constant difference $d$."], ["Geometric sequence", "A sequence with a constant ratio $r$."], ["Recursive rule", "Defines a term using earlier terms."], ["Explicit rule", "Defines $a_n$ directly from $n$."], ["Convergent", "Approaches a finite value."], ["Partial sum", "Sum of a finite number of initial terms."]],
@@ -232,11 +257,13 @@ export const precalculusData = {
         },
         {
             id: "unit-8",
-            title: "Parametric & Polar Curves",
-            subtitle: "Elimination, restrictions, coordinate conversion, and polar sketches",
-            overview: "Eliminate parameters without losing direction or restrictions, convert between rectangular and polar forms, and sketch common polar families.",
-            essentialQuestions: ["What restrictions remain after eliminating a parameter?", "How does a negative radius affect a polar point?", "How do symmetry and key values reveal a polar curve?"],
-            vocabulary: [["Parameter", "A third variable controlling both $x$ and $y$."], ["Rectangular form", "An equation relating $x$ and $y$ directly."], ["Orientation", "The direction a parametric curve is traced."], ["Pole", "The polar origin."], ["Limaçon", "A polar curve of the form $r=a\\pm b\\sin\\theta$ or $a\\pm b\\cos\\theta$."], ["Rose", "A polar curve $r=a\\sin(n\\theta)$ or $a\\cos(n\\theta)$ with petals."]],
+            title: "Conics, Parametric & Polar Curves",
+            subtitle: "Conic equations, elimination, restrictions, coordinate conversion, and polar sketches",
+            curriculumUnit: "Official Unit V",
+            curriculumLevel: "Honors only",
+            overview: "Analyze circles, parabolas, ellipses, and hyperbolas; eliminate parameters without losing restrictions; and convert and sketch polar forms.",
+            essentialQuestions: ["How does standard form reveal a conic's defining features?", "What restrictions remain after eliminating a parameter?", "How does a negative radius affect a polar point?", "How do symmetry and key values reveal a polar curve?"],
+            vocabulary: [["Conic section", "A circle, parabola, ellipse, or hyperbola formed by slicing a double cone."], ["Focus", "A fixed point used in the geometric definition of a conic."], ["Parameter", "A third variable controlling both $x$ and $y$."], ["Orientation", "The direction a parametric curve is traced."], ["Pole", "The polar origin."], ["Limaçon", "A polar curve of the form $r=a\\pm b\\sin\\theta$ or $a\\pm b\\cos\\theta$."], ["Rose", "A polar curve $r=a\\sin(n\\theta)$ or $a\\cos(n\\theta)$ with petals."]],
             lessons: [
                 lesson("1. Parametric equations and restrictions", "Eliminate the parameter and keep the original range information.", `
                     <p>Solve one equation for $t$ and substitute into the other. Then translate any restriction on $t$ into restrictions on $x$ and $y$.</p>
@@ -259,9 +286,11 @@ export const precalculusData = {
             id: "unit-9",
             title: "Limits & Introductory Derivatives",
             subtitle: "Factoring limits, derivative rules, tangents, and horizontal tangents",
-            overview: "Evaluate limits by algebra and end behavior, differentiate power and trig functions, and use derivatives to write tangent lines or locate horizontal tangents.",
-            essentialQuestions: ["When can a removable $0/0$ form be simplified?", "How do degree and leading coefficients control limits at infinity?", "Which derivative rule matches the function structure?", "How does $f'(x)=0$ locate horizontal tangents?"],
-            vocabulary: [["Indeterminate form", "A form such as $0/0$ that signals more work is needed."], ["Limit at infinity", "Long-run behavior as input grows without bound."], ["Derivative", "Instantaneous rate of change."], ["Product rule", "$(fg)'=f'g+fg'$."], ["Quotient rule", "$(f/g)'=(f'g-fg')/g^2$."], ["Horizontal tangent", "A tangent line with slope 0."]],
+            curriculumUnit: "Official Unit VI",
+            curriculumLevel: "Core limits + Honors derivatives",
+            overview: "Read one-sided and two-sided limits, evaluate limits algebraically, connect difference quotients to derivatives, and use first and second derivatives to describe tangents and concavity.",
+            essentialQuestions: ["When do one-sided limits create a two-sided limit?", "When can a removable $0/0$ form be simplified?", "How does a difference quotient become an instantaneous slope?", "Which derivative rule matches the function structure?", "How do first and second derivatives describe a graph?"],
+            vocabulary: [["One-sided limit", "The approached value from only the left or only the right."], ["Indeterminate form", "A form such as $0/0$ that signals more work is needed."], ["Difference quotient", "$[f(x+h)-f(x)]/h$, the secant-slope expression used to define a derivative."], ["Derivative", "Instantaneous rate of change."], ["Second derivative", "The rate of change of the first derivative; its sign describes concavity."], ["Horizontal tangent", "A tangent line with slope 0."]],
             lessons: [
                 lesson("1. Limits by substitution and algebra", "Diagnose the form before choosing a technique.", `
                     <p>Direct substitution works when the function is continuous at the target. If it produces $0/0$, factor or rationalize, cancel the common factor for nearby inputs, then substitute. A nonzero number over zero signals an infinite or nonexistent two-sided limit.</p>
@@ -286,6 +315,157 @@ export const precalculusData = {
         }
     ]
 };
+
+// Curriculum additions verified against the district's 2024 Precalculus/Honors Precalculus document.
+// The final-review packet is narrower than the full course, so these guided lessons close the gaps
+// without inventing additional "official review" questions.
+const addLessons = (unitId, position, newLessons) => {
+    const unit = precalculusData.units.find(candidate => candidate.id === unitId);
+    if (!unit) return;
+    unit.lessons = position === "start" ? [...newLessons, ...unit.lessons] : [...unit.lessons, ...newLessons];
+};
+
+addLessons("unit-1", "start", [
+    lesson("Lines, function notation, domain, and range", "Read a function from an equation, table, or graph and describe where it exists.", `
+        <p>A line can be written $y=mx+b$, in point-slope form $y-y_1=m(x-x_1)$, or in standard form $Ax+By=C$. Parallel lines have equal slopes; nonvertical perpendicular lines have slopes whose product is $-1$.</p>
+        <p>For a function, each input has exactly one output. Evaluate $f(a)$ by substituting $a$. State domain and range with inequalities or interval notation, using parentheses at excluded endpoints and brackets at included endpoints.</p>
+        ${note("Worked example", "<p>For $f(x)=\\sqrt{x-2}$, the radicand requires $x\\ge2$, so the domain is $[2,\\infty)$ and the range is $[0,\\infty)$. A line through $(1,4)$ perpendicular to $y=2x-3$ has slope $-1/2$.</p>")}
+        ${warn("A graph can pass the vertical-line test and still fail the horizontal-line test; that means it is a function but not one-to-one.")}
+    `, ["Choose the line form that fits the known information.", "Domain describes inputs; range describes outputs.", "One input cannot have two outputs."]),
+    lesson("Function behavior, symmetry, transformations, and piecewise rules", "Describe a graph before solving from it.", `
+        <p>A function is increasing where outputs rise from left to right, decreasing where they fall, and constant where they stay level. Even functions satisfy $f(-x)=f(x)$ and have $y$-axis symmetry; odd functions satisfy $f(-x)=-f(x)$ and have origin symmetry.</p>
+        <p>From $y=f(x)$: $f(x-h)+k$ shifts right $h$ and up $k$; $-f(x)$ reflects across the $x$-axis; $f(-x)$ reflects across the $y$-axis; and $af(bx)$ scales vertically by $|a|$ and horizontally by $1/|b|$.</p>
+        ${note("Piecewise check", "<p>At a boundary, use the inequality attached to each rule. For $f(x)=\\begin{cases}x+1,&x<2\\\\x^2,&x\\ge2\\end{cases}$, $f(2)=4$ because the second piece includes 2.</p>")}
+        ${check("Is $x^4+2x^2$ even, odd, or neither?", "Even, because replacing $x$ with $-x$ leaves the formula unchanged.")}
+    `, ["Intervals describe behavior from left to right.", "Inside transformations act horizontally and appear reversed.", "Piecewise endpoints belong only to rules with an inclusive symbol."]),
+    lesson("Operations, composition, and inverse functions", "Combine functions while tracking domain restrictions.", `
+        <p>For functions $f$ and $g$, compute $(f+g)(x)$, $(f-g)(x)$, $(fg)(x)$, and $(f/g)(x)$ algebraically; for a quotient also require $g(x)\\ne0$. Composition means $(f\\circ g)(x)=f(g(x))$, so the output of $g$ must lie in the domain of $f$.</p>
+        <p>To find an inverse, write $y=f(x)$, interchange $x$ and $y$, and solve for $y$. A function has an inverse function only when it is one-to-one, which a graph checks with the horizontal-line test.</p>
+        ${note("Worked example", "<p>If $f(x)=2x-5$ and $g(x)=x^2$, then $(f\\circ g)(x)=2x^2-5$, while $(g\\circ f)(x)=(2x-5)^2$. Also $f^{-1}(x)=(x+5)/2$.</p>")}
+        ${warn("$f^{-1}(x)$ means inverse function, not $1/f(x)$.")}
+    `, ["Composition order matters.", "Carry domain restrictions through every operation.", "Verify inverses with both compositions when possible."]),
+    lesson("Quadratic functions and models", "Move among standard, vertex, and intercept forms.", `
+        <p>For $f(x)=ax^2+bx+c$, the axis of symmetry is $x=-b/(2a)$ and the vertex is found by evaluating there. Vertex form $a(x-h)^2+k$ reveals the vertex $(h,k)$; intercept form $a(x-r_1)(x-r_2)$ reveals the zeros.</p>
+        <p>A positive $a$ gives a minimum and a negative $a$ gives a maximum. Solve with factoring, completing the square, or $x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$.</p>
+        ${note("Worked example", "<p>$x^2-6x+5=(x-3)^2-4$, so the vertex is $(3,-4)$, the axis is $x=3$, and the zeros are 1 and 5.</p>")}
+    `, ["Each quadratic form exposes different features.", "The discriminant predicts the number and type of roots.", "A vertex gives the maximum or minimum of a quadratic model."]),
+    lesson("Polynomial division and zero theorems", "Use division and theorems to locate every polynomial zero.", `
+        <p>Polynomial long division works for any divisor. Synthetic division is a shortcut for division by $x-c$. The Remainder Theorem says the remainder is $f(c)$, and the Factor Theorem says $x-c$ is a factor exactly when $f(c)=0$.</p>
+        <p>The Rational Zero Theorem lists candidates $\\pm p/q$, where $p$ divides the constant term and $q$ divides the leading coefficient. The Fundamental Theorem of Algebra guarantees exactly $n$ complex zeros for degree $n$, counting multiplicity; nonreal zeros of a real polynomial occur in conjugate pairs.</p>
+        ${note("Worked example", "<p>If synthetic division of $f(x)$ by $x-2$ gives remainder 0, then 2 is a zero. If $3+2i$ is a zero of a real polynomial, then $3-2i$ is also a zero.</p>")}
+    `, ["Synthetic value $c$ corresponds to divisor $x-c$.", "A zero remainder proves a factor.", "Count real and nonreal zeros with multiplicity."])
+]);
+
+addLessons("unit-1", "end", [
+    lesson("Rational-expression operations", "Simplify and combine rational expressions without losing restrictions.", `
+        <p>Factor every numerator and denominator first. For multiplication, cancel common factors; for division, multiply by the reciprocal. For addition or subtraction, build the least common denominator and combine numerators. A complex fraction can be cleared by multiplying every term by its least common denominator.</p>
+        ${note("Worked example", "<p>$\\frac{x}{x-2}-\\frac{2}{x+2}=\\frac{x(x+2)-2(x-2)}{(x-2)(x+2)}=\\frac{x^2+4}{x^2-4}$, with $x\\ne\\pm2$.</p>")}
+        ${warn("Only factors cancel. Terms joined by addition or subtraction do not.")}
+    `, ["Factor before operating.", "Use a common denominator for addition and subtraction.", "State restrictions from every original denominator."], "Honors"),
+    lesson("Exponential and logarithmic models", "Build growth, decay, interest, and logarithmic models from context.", `
+        <p>Discrete growth and decay use $A=A_0(1+r)^t$; continuous change uses $A=A_0e^{kt}$. Compound interest uses $A=P(1+r/n)^{nt}$ and continuous interest uses $A=Pe^{rt}$. Solve for time by isolating the exponential and taking a logarithm.</p>
+        <p>Logarithmic models are appropriate when equal multiplicative changes in input create equal additive changes in output, as with pH or decibel scales.</p>
+        ${note("Worked example", "<p>A population that doubles every 6 years can be modeled by $P(t)=P_0 2^{t/6}=P_0e^{(\\ln2/6)t}$.</p>")}
+    `, ["Match the time unit to the rate.", "A negative continuous rate models decay.", "Logs isolate a variable in an exponent."], "Honors")
+]);
+
+addLessons("unit-2", "end", [
+    lesson("Arc length, sector area, and angular speed", "Connect radian measure to motion on a circle.", `
+        <div class="math-block">$$s=r\\theta,\\qquad A=\\frac12r^2\\theta,\\qquad v=r\\omega$$</div>
+        <p>These formulas require $\\theta$ in radians. Angular speed $\\omega$ measures angle per unit time; linear speed $v$ measures distance per unit time.</p>
+        ${note("Worked example", "<p>A wheel of radius 0.4 m turning at $3\\pi$ radians per second has rim speed $v=(0.4)(3\\pi)=1.2\\pi$ m/s.</p>")}
+    `, ["Convert degrees to radians first.", "Arc length is radius times angle.", "Linear speed grows with both radius and angular speed."])
+]);
+
+addLessons("unit-3", "end", [
+    lesson("Verifying trigonometric identities", "Transform one side into the other with reversible algebra.", `
+        <p>Start with the more complicated side. Factor, combine fractions, or rewrite in sine and cosine; then use reciprocal, quotient, and Pythagorean identities. Do not move terms across the equals sign as if solving an equation.</p>
+        ${note("Worked example", "<p>$\\frac{1-\\cos^2x}{\\sin x}=\\frac{\\sin^2x}{\\sin x}=\\sin x$ wherever the original expression is defined.</p>")}
+    `, ["Work on one side at a time.", "Show the identity used at each structural change.", "Both sides must share a common domain."]),
+    lesson("Sum and difference formulas", "Find exact trig values for angles built from known angles.", `
+        <div class="math-block">$$\\sin(u\\pm v)=\\sin u\\cos v\\pm\\cos u\\sin v$$</div>
+        <div class="math-block">$$\\cos(u\\pm v)=\\cos u\\cos v\\mp\\sin u\\sin v$$</div>
+        <p>The tangent formula is $\\tan(u\\pm v)=\\frac{\\tan u\\pm\\tan v}{1\\mp\\tan u\\tan v}$. Choose a decomposition such as $75^\\circ=45^\\circ+30^\\circ$ and preserve the sign pattern carefully.</p>
+        ${check("What is $\\cos75^\\circ$?", "$\\frac{\\sqrt6-\\sqrt2}{4}$.")}
+    `, ["Cosine uses the opposite sign in the middle.", "Choose angles with known exact values.", "The formula sheet provides these identities."]),
+    lesson("Double-angle, half-angle, and product-to-sum formulas", "Apply the Honors multiple-angle identities supplied on the formula sheet.", `
+        <p>Use $\\sin2u=2\\sin u\\cos u$, the three equivalent forms of $\\cos2u$, and $\\tan2u=2\\tan u/(1-\\tan^2u)$. Half-angle square roots require a sign chosen from the quadrant of $u/2$.</p>
+        <p>Product-to-sum formulas convert products such as $\\sin u\\cos v$ into sums of angles. They are useful for exact evaluation and later calculus work.</p>
+        ${warn("The $\\pm$ in a half-angle formula is determined by the output angle's quadrant, not by the original ratio's sign alone.")}
+    `, ["Choose the cosine double-angle form that simplifies the given expression.", "Solve a doubled-angle equation over a doubled interval.", "Use the quadrant to select a half-angle sign."], "Honors")
+]);
+
+addLessons("unit-4", "end", [
+    lesson("Sinusoidal models and harmonic motion", "Translate a periodic situation into amplitude, period, midline, and phase.", `
+        <p>For maximum $M$ and minimum $m$, amplitude is $(M-m)/2$ and midline is $(M+m)/2$. If one cycle takes $T$ units, then $b=2\\pi/T$. Use cosine when the model begins at an extreme and sine when it begins on the midline.</p>
+        ${note("Worked example", "<p>A Ferris-wheel height varying from 2 m to 34 m every 40 s has amplitude 16, midline 18, and $b=\\pi/20$.</p>")}
+    `, ["Amplitude is half the full vertical range.", "Period comes from the physical cycle time.", "A horizontal shift aligns the chosen starting event."])
+]);
+
+addLessons("unit-5", "end", [
+    lesson("Area of oblique triangles", "Choose the SAS area formula or Heron's Formula from the information given.", `
+        <div class="math-block">$$K=\\frac12ab\\sin C,\\qquad K=\\sqrt{s(s-a)(s-b)(s-c)},\\quad s=\\frac{a+b+c}{2}$$</div>
+        <p>Use $K=\\frac12ab\\sin C$ when two sides and their included angle are known. Use Heron's Formula when all three sides are known, after checking the triangle inequality.</p>
+        ${check("Find the area when $a=8$, $b=11$, and $C=30^\\circ$.", "$K=\\frac12(8)(11)(1/2)=22$ square units.")}
+    `, ["The sine formula needs the included angle.", "Heron's $s$ is the semiperimeter.", "Verify that the side lengths form a triangle."])
+]);
+
+addLessons("unit-6", "end", [
+    lesson("Probability rules", "Distinguish complements, unions, intersections, and independence.", `
+        <p>The complement rule is $P(A^c)=1-P(A)$. For any events, $P(A\\cup B)=P(A)+P(B)-P(A\\cap B)$. Mutually exclusive events have $P(A\\cap B)=0$; independent events satisfy $P(A\\cap B)=P(A)P(B)$.</p>
+        ${note("Worked example", "<p>If $P(A)=0.6$, $P(B)=0.5$, and $P(A\\cap B)=0.3$, the events are independent because $0.6(0.5)=0.3$, and $P(A\\cup B)=0.8$.</p>")}
+        ${warn("Mutually exclusive and independent mean different things. Nonzero mutually exclusive events cannot be independent.")}
+    `, ["Use a complement for 'at least one'.", "Subtract overlap when adding probabilities.", "Independence is tested with a product."]),
+    lesson("Complex-number operations and De Moivre's Theorem", "Multiply, divide, and raise complex numbers in trigonometric form.", `
+        <p>In rectangular form, add and subtract real and imaginary parts; multiply with distribution and $i^2=-1$; divide by multiplying by the conjugate. In polar form, multiply moduli and add arguments, or divide moduli and subtract arguments.</p>
+        <div class="math-block">$$[r(\\cos\\theta+i\\sin\\theta)]^n=r^n(\\cos n\\theta+i\\sin n\\theta)$$</div>
+        ${note("Worked example", "<p>$[2\\,\\mathrm{cis}(\\pi/3)]^3=8\\,\\mathrm{cis}(\\pi)=-8$.</p>")}
+    `, ["Conjugates make a real denominator.", "Polar multiplication adds angles.", "De Moivre multiplies the argument by the power."], "Honors")
+]);
+
+addLessons("unit-8", "start", [
+    lesson("Circles and parabolas", "Identify centers, radii, vertices, foci, and directrices from standard form.", `
+        <p>A circle has form $(x-h)^2+(y-k)^2=r^2$. A vertical parabola has $(x-h)^2=4p(y-k)$ with focus $(h,k+p)$ and directrix $y=k-p$; a horizontal parabola has $(y-k)^2=4p(x-h)$.</p>
+        ${note("Worked example", "<p>$(x+2)^2+y^2=9$ is centered at $(-2,0)$ with radius 3. For $(x-1)^2=8(y+3)$, $p=2$, so the vertex is $(1,-3)$ and focus is $(1,-1)$.</p>")}
+    `, ["Complete the square to reach standard form.", "The sign of $p$ gives the opening direction.", "A parabola is equidistant from its focus and directrix."], "Honors"),
+    lesson("Ellipses and hyperbolas", "Read vertices, foci, and asymptotes from conic standard forms.", `
+        <p>For an ellipse, the larger denominator is $a^2$ and $c^2=a^2-b^2$. For a hyperbola, the positive term identifies the transverse axis, $c^2=a^2+b^2$, and center-relative asymptotes come from the matching rise/run ratio.</p>
+        <div class="math-block">$$\\frac{(x-h)^2}{a^2}+\\frac{(y-k)^2}{b^2}=1,\\qquad \\frac{(x-h)^2}{a^2}-\\frac{(y-k)^2}{b^2}=1$$</div>
+        ${warn("In an ellipse, $a^2$ is the larger denominator. In a hyperbola, $a^2$ is under the positive term.")}
+    `, ["The center comes from $(h,k)$.", "Ellipse foci lie inside; hyperbola foci lie beyond the vertices.", "Translate asymptotes through the center."], "Honors")
+]);
+
+addLessons("unit-9", "start", [
+    lesson("Graphical, one-sided, and piecewise limits", "Decide what a function approaches from each side.", `
+        <p>$\\lim_{x\\to a^-}f(x)$ approaches from inputs below $a$ and $\\lim_{x\\to a^+}f(x)$ approaches from above. A two-sided limit exists only when these one-sided limits agree. The actual value $f(a)$ may be different or undefined.</p>
+        <p>For a piecewise function, use the piece active on each side of the boundary. An open circle can still reveal a limit; a jump gives unequal one-sided limits and therefore no two-sided limit.</p>
+        ${check("If the left-hand limit is 2 and the right-hand limit is 5, what is the two-sided limit?", "It does not exist because the one-sided limits disagree.")}
+    `, ["Approach direction matters.", "A limit is not necessarily the function value.", "Two matching one-sided limits create a two-sided limit."]),
+    lesson("Difference quotient and average rate of change", "Connect secant slopes to the derivative definition.", `
+        <p>The average rate of change on $[a,b]$ is $[f(b)-f(a)]/(b-a)$. The difference quotient $[f(x+h)-f(x)]/h$ is a secant slope; its limit as $h\\to0$ is the derivative $f'(x)$.</p>
+        ${note("Worked example", "<p>For $f(x)=x^2$, $\\frac{(x+h)^2-x^2}{h}=2x+h$, so the limiting slope is $f'(x)=2x$.</p>")}
+        ${warn("Expand $f(x+h)$ with parentheses around the entire input.")}
+    `, ["Average rate uses two distinct inputs.", "The derivative is the limiting secant slope.", "Cancel $h$ only after factoring the numerator."])
+]);
+
+addLessons("unit-9", "end", [
+    lesson("Higher-order derivatives and concavity", "Use the second derivative to describe how slope changes.", `
+        <p>The second derivative $f''(x)$ is the derivative of $f'(x)$. Where $f''(x)>0$, slopes increase and the graph is concave up; where $f''(x)<0$, slopes decrease and the graph is concave down. A possible inflection point occurs where concavity actually changes.</p>
+        ${note("Worked example", "<p>For $f(x)=x^3-3x$, $f''(x)=6x$. The graph is concave down for $x<0$, concave up for $x>0$, and has an inflection point at $(0,0)$.</p>")}
+        ${warn("Solving $f''(x)=0$ finds candidates; verify a sign change before calling one an inflection point.")}
+    `, ["Differentiate again for the second derivative.", "The sign of $f''$ determines concavity.", "Inflection requires a concavity change."], "Honors")
+]);
+
+// Apply the district's asterisk convention to lessons already present in the packet-driven site.
+precalculusData.units.forEach(unit => {
+    unit.lessons.forEach(currentLesson => {
+        if (unit.id === "unit-8"
+            || (unit.id === "unit-6" && currentLesson.title.includes("Complex"))
+            || (unit.id === "unit-9" && /Limits at infinity|Derivative rules|Tangent lines/.test(currentLesson.title))) {
+            currentLesson.level = "Honors";
+        }
+    });
+});
 
 // Unit 1: final review 1-15.
 precalculusData.units[0].questions.push(
@@ -326,7 +506,7 @@ precalculusData.units[2].questions.push(
     rq(3,27,"Trig identities","Simplify $\\frac{\\csc x}{\\tan x+\\cot x}$.",["$\\cos x$","$\\sin x$","$\\sec x$","$1$"],0,"The denominator becomes $1/(\\sin x\\cos x)$; dividing leaves $\\cos x$."),
     rq(3,28,"Trig identities","Simplify $\\frac{1+\\cos x}{\\sin x}+\\frac{\\sin x}{1+\\cos x}$.",["$2\\csc x$","$2\\sec x$","$\\sin2x$","$\\cot x$"],0,"A common denominator gives $2(1+\\cos x)/[(1+\\cos x)\\sin x]=2/\\sin x$."),
     rq(3,29,"Trig identities","Simplify $\\frac{\\tan x}{\\csc x}+\\frac{\\sin x}{\\tan x}$.",["$\\sec x$","$\\csc x$","$2\\sin x$","$1$"],0,"The terms become $\\sin^2x/\\cos x$ and $\\cos x$; combine using $\\sin^2x+\\cos^2x=1$."),
-    rq(3,30,"Trig equations","Which list correctly summarizes the solutions on $[0,2\\pi)$ for all six equations in review #30?",["a) $0,\\pi,7\\pi/6,11\\pi/6$; b) $3\\pi/8,5\\pi/8,11\\pi/8,13\\pi/8$; c) $\\pi/3,2\\pi/3,4\\pi/3,5\\pi/3$; d) $0,2\\pi/3,4\\pi/3$; e) $0,\\pi,\\pi/3,5\\pi/3$; f) $0,\\pi,\\pi/4,3\\pi/4,5\\pi/4,7\\pi/4$","Every equation has only $0$ and $\\pi$","a) $\\pi/6,5\\pi/6$; b) $3\\pi/4,5\\pi/4$; c) $\\pi/3,4\\pi/3$; d) $\\pi$; e) $\\pi/2,3\\pi/2$; f) $\\pi/4,5\\pi/4$","No equation has a solution at $0$"],0,"Factor each equation and solve every case. For the double-angle equation, solve across a $4\\pi$ interval before dividing by 2.","Challenge")
+    rq(3,30,"Trig equations","Which list correctly summarizes the solutions on $[0,2\\pi)$ for all six equations in review #30?",["a) $0,\\pi,7\\pi/6,11\\pi/6$; b) $3\\pi/8,5\\pi/8,11\\pi/8,13\\pi/8$; c) $\\pi/3,2\\pi/3,4\\pi/3,5\\pi/3$; d) $0,\\pi/3,5\\pi/3$; e) $0,\\pi,\\pi/3,5\\pi/3$; f) $0,\\pi,\\pi/4,3\\pi/4,5\\pi/4,7\\pi/4$","Every equation has only $0$ and $\\pi$","a) $\\pi/6,5\\pi/6$; b) $3\\pi/4,5\\pi/4$; c) $\\pi/3,4\\pi/3$; d) $\\pi$; e) $\\pi/2,3\\pi/2$; f) $\\pi/4,5\\pi/4$","No equation has a solution at $0$"],0,"Factor each equation and solve every case. In part (d), $\\tan^2x+\\sec x-1=0$ becomes $\\sec^2x+\\sec x-2=0$, so $\\sec x=1$ or $-2$. For the double-angle equation, solve across a $4\\pi$ interval before dividing by 2.","Challenge")
 );
 
 // Unit 4: review 31-33, 66-74, and 94-102.
@@ -334,13 +514,13 @@ precalculusData.units[3].questions.push(
     rq(4,31,"Trig graphs","The review graph is an increasing tangent curve with period $\\pi/4$ and zero at $x=\\pi/8$. Which equation matches?",["$y=\\tan(4x-\\pi/2)$","$y=-\\cot x$","$y=\\tan x$","$y=\\tan(4x-\\pi/8)$"],0,"Tangent's zero occurs when $4x-\\pi/2=0$, giving $x=\\pi/8$, and $b=4$ gives period $\\pi/4$."),
     rq(4,32,"Trig graphs","Which basic graph matches $y=-\\cos(2(x+\\pi/2))$?",["A cosine graph with period $\\pi$ and a maximum at $x=0$","A sine graph with period $2\\pi$ and zero at $x=0$","A cosine graph with period $2\\pi$ and a minimum at $x=0$","A tangent graph with period $\\pi$"],0,"The expression simplifies to $\\cos2x$, which has period $\\pi$ and value 1 at $x=0$."),
     rq(4,33,"Trig graphs","Which description matches $f(x)=1+\\sec(2x)$?",["Period $\\pi$, upward shift 1, with branches touching $y=2$ and $y=0$","Period $2\\pi$, downward shift 1","Period $\\pi/2$, range all real","A sine wave of amplitude 1"],0,"Secant inherits cosine's period $\\pi$ for input $2x$, then shifts up 1."),
-    rq(4,66,"Trig graphs","Match $(x+2)^2+y^2=9$ to its graph description.",["Circle centered $(-2,0)$ with radius 3","Circle centered $(2,0)$ with radius 9","Parabola with vertex $(-2,0)$","Ellipse centered at the origin"],0,"Circle standard form is $(x-h)^2+(y-k)^2=r^2$."),
-    rq(4,67,"Trig graphs","Match $y=(x-3)^2-5$ to its graph description.",["Upward parabola with vertex $(3,-5)$","Downward parabola with vertex $(-3,5)$","Exponential with asymptote $y=-5$","Circle of radius 5"],0,"Vertex form reads directly as $(h,k)=(3,-5)$."),
+    rq(4,66,"Conic sections","Match $(x+2)^2+y^2=9$ to its graph description.",["Circle centered $(-2,0)$ with radius 3","Circle centered $(2,0)$ with radius 9","Parabola with vertex $(-2,0)$","Ellipse centered at the origin"],0,"Circle standard form is $(x-h)^2+(y-k)^2=r^2$."),
+    rq(4,67,"Conic sections","Match $y=(x-3)^2-5$ to its graph description.",["Upward parabola with vertex $(3,-5)$","Downward parabola with vertex $(-3,5)$","Exponential with asymptote $y=-5$","Circle of radius 5"],0,"Vertex form reads directly as $(h,k)=(3,-5)$."),
     rq(4,68,"Exponential functions","Which description matches $y=e^{-x}+2$?",["Decreasing exponential with horizontal asymptote $y=2$","Increasing exponential with vertical asymptote $x=2$","Decreasing logarithm with vertical asymptote $x=2$","Upward parabola shifted 2"],0,"The negative exponent reflects $e^x$ across the $y$-axis and the +2 shifts the horizontal asymptote."),
     rq(4,69,"Exponential functions","Which description matches $y=-e^x+2$?",["Decreases from horizontal asymptote $y=2$ toward $-\\infty$","Increases from $-\\infty$ toward asymptote $y=2$","Has vertical asymptote $x=2$","Is always positive"],0,"The outside negative reflects $e^x$ over the $x$-axis; +2 shifts it upward."),
     rq(4,70,"Logarithms","Which description matches $y=-\\ln(x-2)$?",["Domain $x>2$, vertical asymptote $x=2$, decreasing","Domain $x<2$, vertical asymptote $x=2$, increasing","Domain all real, horizontal asymptote $y=2$","Domain $x>0$, increasing"],0,"The inside shift gives $x>2$ and the outside negative reflects the log vertically."),
     rq(4,71,"Logarithms","Which description matches $y=\\ln(2-x)$?",["Domain $x<2$, vertical asymptote $x=2$, decreasing","Domain $x>2$, vertical asymptote $x=2$, increasing","Domain all real, decreasing","Horizontal asymptote $y=2$"],0,"The argument requires $2-x>0$, and increasing $x$ makes the argument smaller."),
-    rq(4,72,"Trig graphs","For $y=-x^2(x+3)(x-1)$, what key graph features identify it?",["Zeros $-3,0,1$; $0$ has multiplicity 2; both ends down","Zeros $3,0,-1$; all cross; both ends up","Zeros $-3,1$ only; odd degree","No real zeros; both ends down"],0,"The leading term is $-x^4$ and $x=0$ is a double zero."),
+    rq(4,72,"Zeros and multiplicity","For $y=-x^2(x+3)(x-1)$, what key graph features identify it?",["Zeros $-3,0,1$; $0$ has multiplicity 2; both ends down","Zeros $3,0,-1$; all cross; both ends up","Zeros $-3,1$ only; odd degree","No real zeros; both ends down"],0,"The leading term is $-x^4$ and $x=0$ is a double zero."),
     rq(4,73,"Trig graphs","Describe $y=\\sin(2x+\\pi/2)$.",["Amplitude 1, period $\\pi$, phase shift $-\\pi/4$","Amplitude 2, period $2\\pi$, phase shift $\\pi/2$","Amplitude 1, period $4\\pi$, shift $\\pi/4$","Amplitude $\\pi/2$, period 2"],0,"Factor the inside as $2(x+\\pi/4)$; period is $2\\pi/2=\\pi$."),
     rq(4,74,"Trig graphs","Describe $y=-3\\cos(x-\\pi)+1$.",["Amplitude 3, period $2\\pi$, shift right $\\pi$, midline $y=1$, reflected","Amplitude $-3$, period $\\pi$, shift left $\\pi$","Amplitude 1, period $2\\pi$, midline $y=-3$","Amplitude 3, period $\\pi/2$, shift right 1"],0,"Read $a=-3,b=1,h=\\pi,k=1$ from transformation form."),
     rq(4,94,"Trig graphs","In the review's graph bank, $f(x)=-\\cos(x-\\pi)$ matches which equivalent parent behavior?",["$\\cos x$","$-\\cos x$","$\\sin x$","$-\\sin x$"],0,"$\\cos(x-\\pi)=-\\cos x$, and the outside negative makes $\\cos x$."),
@@ -356,7 +536,7 @@ precalculusData.units[3].questions.push(
 
 // Unit 5: review 34.
 precalculusData.units[4].questions.push(
-    rq(5,34,"Triangles","Which summary correctly solves all five triangles in review #34?",["a) $A\\approx30.31^\\circ,B\\approx111.28^\\circ,C\\approx38.41^\\circ$; b) two triangles; c) none; d) one; e) $b\\approx16.21,A\\approx104.94^\\circ,C\\approx51.06^\\circ$","a) no triangle; b) one; c) two; d) none; e) two","All five have exactly one triangle","All five require only right-triangle trig"],0,"SSS in (a) uses cosine; SSA in (b) produces two; (c) produces a sine value above 1; (d) has only one valid supplement; SAS in (e) uses cosine first.","Challenge")
+    rq(5,34,"Triangles","Which summary correctly solves all five triangles in review #34?",["a) $A\\approx30.31^\\circ,B\\approx111.28^\\circ,C\\approx38.41^\\circ$; b) $(A_1,B_1,b_1)\\approx(25.99^\\circ,134.01^\\circ,67.29)$ or $(154.01^\\circ,5.99^\\circ,9.76)$; c) no triangle; d) $(B,C,b)\\approx(83.74^\\circ,44.26^\\circ,44.15)$; e) $(A,C,b)\\approx(104.94^\\circ,51.06^\\circ,16.21)$","a) no triangle; b) one; c) two; d) none; e) two","All five have exactly one triangle","All five require only right-triangle trig"],0,"SSS in (a) uses the Law of Cosines. SSA in (b) gives two valid angle supplements, while (c) gives an impossible sine value. In (d) only one supplement fits the angle sum; SAS in (e) uses the Law of Cosines first.","Challenge")
 );
 
 // Unit 6: review 35-44, 54-56, and 103-105.
@@ -431,3 +611,18 @@ precalculusData.units[8].questions.push(
     rq(9,93,"Derivatives","Where does $g(x)=\\cos x\\sin x$ have horizontal tangents on $[0,2\\pi)$?",["$(\\pi/4,1/2),(3\\pi/4,-1/2),(5\\pi/4,1/2),(7\\pi/4,-1/2)$","$(0,0),(\\pi,0)$","$(\\pi/2,0),(3\\pi/2,0)$","$(\\pi/4,1),(5\\pi/4,-1)$"],0,"$g'(x)=\\cos^2x-\\sin^2x=\\cos2x$. Set it to zero and substitute into $g$.")
 );
 
+// The packet places #66-74 in one graph-matching block, but the district curriculum
+// classifies those graphs by family. Move them to their actual instructional homes.
+const questionHomes = new Map([
+    [66, "unit-8"], [67, "unit-8"],
+    [68, "unit-1"], [69, "unit-1"], [70, "unit-1"], [71, "unit-1"], [72, "unit-1"]
+]);
+const sourceNumber = item => Number(item.source.match(/#(\d+)/)?.[1] || 0);
+questionHomes.forEach((targetUnitId, number) => {
+    const sourceUnit = precalculusData.units.find(unit => unit.questions.some(item => sourceNumber(item) === number));
+    const targetUnit = precalculusData.units.find(unit => unit.id === targetUnitId);
+    if (!sourceUnit || !targetUnit || sourceUnit === targetUnit) return;
+    const index = sourceUnit.questions.findIndex(item => sourceNumber(item) === number);
+    targetUnit.questions.push(sourceUnit.questions.splice(index, 1)[0]);
+});
+precalculusData.units.forEach(unit => unit.questions.sort((a, b) => sourceNumber(a) - sourceNumber(b)));

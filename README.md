@@ -4,12 +4,15 @@ A standalone static study site modeled on the sibling `algebra-2` project. It in
 
 **Live site:** https://bari2d.github.io/precalculus/
 
-- 9 curriculum units and 29 guided lessons
+- 9 focused study units and 49 guided lessons covering all 6 official curriculum units
 - 9 interactive canvas sandboxes
 - All 108 questions from the supplied final-review packet
-- Worked answer feedback based on the supplied key
+- Core/Honors labels matching the district curriculum's asterisks
+- Worked answer feedback checked against the supplied key
 - Local quiz progress, starred lessons, and starred questions
-- Downloadable copies of the exam-provided formula sheet, review, and key
+- Downloadable copies of the official curriculum, exam-provided formula sheet, review, and key
+
+See [CURRICULUM_AUDIT.md](CURRICULUM_AUDIT.md) for the source-by-source coverage audit and question corrections.
 
 ## Run locally
 
