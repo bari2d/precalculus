@@ -1,12 +1,12 @@
 // Guided lesson and unit overview manager.
-import { precalculusData } from './data.js?v=precalculus-4';
-import { initSandbox } from './interactive.js?v=precalculus-4';
+import { precalculusData } from './data.js?v=precalculus-5';
+import { initSandbox } from './interactive.js?v=precalculus-5';
 import {
     isLessonStarred,
     markLessonViewed,
     subscribeProgress,
     toggleLessonStar
-} from './progress.js?v=precalculus-4';
+} from './progress.js?v=precalculus-5';
 
 const sandboxDescriptions = {
     "unit-1": "Compare a rational function with its asymptotes and removable hole.",
@@ -24,7 +24,7 @@ const memoryAnchors = {
     "unit-1": ["Domain first → features second", "Compose inside-out; reverse for inverses", "Factor → restrict → cancel → classify", "Logs demand positive arguments"],
     "unit-2": ["$(\\cos\\theta,\\sin\\theta)$", "$360^\\circ=2\\pi$", "$s=r\\theta$ and $v=r\\omega$"],
     "unit-3": ["Rewrite → factor → solve every case", "$\\sin^2x+\\cos^2x=1$", "Sum formulas build unfamiliar angles"],
-    "unit-4": ["Family → period → shift → reflection", "$P_{\\sin,\\cos}=2\\pi/|b|$"],
+    "unit-4": ["Family → period → shift → reflection", "Period: $T=\\frac{2\\pi}{|b|}$"],
     "unit-5": ["SSS/SAS: cosine; opposite pair: sine", "SSA can make 0, 1, or 2 triangles", "Area: included angle or semiperimeter"],
     "unit-6": ["$a+bi\\leftrightarrow(a,b)$", "Order matters? permutation : combination", "Union subtracts overlap; independence multiplies"],
     "unit-7": ["Difference → arithmetic; ratio → geometric", "$|r|<1$ for an infinite sum"],
@@ -91,8 +91,8 @@ export function initReviewPanel({
             <div class="overview-heading">
                 <span class="eyebrow">Unit snapshot</span>
                 <strong>${unit.overview}</strong>
-                <div class="curriculum-tags" aria-label="Curriculum alignment">
-                    <span>${unit.curriculumUnit || 'Official curriculum'}</span>
+                <div class="curriculum-tags" aria-label="Course classification">
+                    <span>${unit.curriculumUnit || 'Course topic'}</span>
                     <span class="${unit.curriculumLevel?.toLowerCase().includes('honors') ? 'honors' : ''}">${unit.curriculumLevel || 'Core'}</span>
                 </div>
             </div>
@@ -169,11 +169,14 @@ export function initReviewPanel({
                     <div class="lesson-glossary-heading"><span>Before you start</span><strong>Key words in this lesson</strong></div>
                     <dl>${glossary.map(([term, definition]) => `<div><dt>${term}</dt><dd>${definition}</dd></div>`).join('')}</dl>
                 </aside>
-                <figure class="memory-anchor">
-                    <div class="memory-anchor-heading"><span>Memory anchor</span><strong>${anchors[index % anchors.length]}</strong></div>
-                    <div class="memory-formula-art" aria-hidden="true">${anchors[(index + 1) % anchors.length]}</div>
-                    <figcaption><strong>Exam move:</strong> Name the function family or formula before doing algebra.</figcaption>
-                </figure>
+                <aside class="memory-anchor" aria-label="Memory anchor">
+                    <span class="memory-anchor-label">Memory anchor</span>
+                    <div class="memory-anchor-cues">
+                        <strong>${anchors[index % anchors.length]}</strong>
+                        <span>${anchors[(index + 1) % anchors.length]}</span>
+                    </div>
+                    <p class="memory-anchor-tip"><strong>Exam move:</strong> Name the function family or formula before doing algebra.</p>
+                </aside>
                 <div class="lesson-body-copy">${currentLesson.content}</div>
                 <div class="takeaways-box"><strong>Remember</strong><ul>${currentLesson.takeaways.map(item => `<li>${item}</li>`).join('')}</ul></div>
                 <div class="lesson-end-navigation">
@@ -221,6 +224,17 @@ export function initReviewPanel({
             delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }],
             throwOnError: false,
             strict: 'ignore'
+        });
+        markLongInlineMath(container);
+    }
+
+    function markLongInlineMath(container) {
+        container.querySelectorAll('.katex').forEach(math => {
+            if (math.closest('.katex-display') || math.closest('.memory-anchor')) return;
+            const source = math.querySelector('annotation[encoding="application/x-tex"]')?.textContent || '';
+            if (source.length >= 56) {
+                math.classList.add('katex-long-inline');
+            }
         });
     }
 
