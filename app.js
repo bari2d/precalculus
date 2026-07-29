@@ -1,7 +1,7 @@
 // Main Application Controller Module
-import { precalculusData } from './data.js?v=precalculus-4';
-import { initReviewPanel } from './review.js?v=precalculus-4';
-import { initPracticePanel } from './practice.js?v=precalculus-4';
+import { precalculusData } from './data.js?v=precalculus-5';
+import { initReviewPanel } from './review.js?v=precalculus-5';
+import { initPracticePanel } from './practice.js?v=precalculus-5';
 import {
     getProgressState,
     getStats,
@@ -13,7 +13,7 @@ import {
     signOutProgress,
     subscribeProgress,
     subscribeSyncState
-} from './progress.js?v=precalculus-4';
+} from './progress.js?v=precalculus-5';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Navigation / Routing DOM Elements
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>${unit.title}</h4>
                     <p>${unit.subtitle}</p>
                     <div class="unit-curriculum-meta">
-                        <span>${unit.curriculumUnit || 'Official curriculum'}</span>
+                        <span>${unit.curriculumUnit || 'Course topic'}</span>
                         <span class="${unit.curriculumLevel?.toLowerCase().includes('honors') ? 'honors' : ''}">${unit.curriculumLevel || 'Core'}</span>
                     </div>
                 </div>

@@ -1,11 +1,11 @@
 // Practice section and quiz engine.
-import { precalculusData } from './data.js?v=precalculus-4';
+import { precalculusData } from './data.js?v=precalculus-5';
 import {
     isQuestionStarred,
     recordQuizResult,
     subscribeProgress,
     toggleQuestionStar
-} from './progress.js?v=precalculus-4';
+} from './progress.js?v=precalculus-5';
 
 export function initPracticePanel(elems, onStatsUpdate) {
     let currentQuestions = [];
@@ -15,7 +15,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
     let answerLog = [];
     let latestProgress = { starredQuestions: [] };
 
-    elems.modeSelect.innerHTML = '<option value="cumulative">Complete final review (packet order)</option>';
+    elems.modeSelect.innerHTML = '<option value="cumulative">Complete practice set (numbered order)</option>';
     const starredOption = document.createElement('option');
     starredOption.value = 'starred';
     starredOption.innerText = 'Starred questions (0)';
@@ -36,7 +36,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
     }
     const bankNote = document.getElementById('practice-bank-note');
     if (bankNote) {
-        bankNote.innerText = `Question bank: ${bankSize} supplied review questions across ${precalculusData.units.length} study units. Full review follows packet order; Quick review is balanced and randomized.`;
+        bankNote.innerText = `Question bank: ${bankSize} practice questions across ${precalculusData.units.length} study units. The full set follows numbered order; Quick review is balanced and randomized.`;
     }
 
     elems.btnStart.addEventListener('click', () => startQuiz(elems.modeSelect.value, elems.lengthSelect?.value || 'all'));
@@ -284,6 +284,17 @@ export function initPracticePanel(elems, onStatsUpdate) {
             ],
             throwOnError: false,
             strict: 'ignore'
+        });
+        markLongInlineMath(container);
+    }
+
+    function markLongInlineMath(container) {
+        container.querySelectorAll('.katex').forEach(math => {
+            if (math.closest('.katex-display') || math.closest('.memory-anchor')) return;
+            const source = math.querySelector('annotation[encoding="application/x-tex"]')?.textContent || '';
+            if (source.length >= 56) {
+                math.classList.add('katex-long-inline');
+            }
         });
     }
 }

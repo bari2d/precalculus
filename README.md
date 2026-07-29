@@ -1,18 +1,15 @@
-# Honors Precalculus Final Review
+# Precalculus Study Guide
 
 A standalone static study site modeled on the sibling `algebra-2` project. It includes:
 
 **Live site:** https://bari2d.github.io/precalculus/
 
-- 9 focused study units and 49 guided lessons covering all 6 official curriculum units
+- 9 focused study units and 49 guided lessons
 - 9 interactive canvas sandboxes
-- All 108 questions from the supplied final-review packet
-- Core/Honors labels matching the district curriculum's asterisks
-- Worked answer feedback checked against the supplied key
+- 108 cumulative practice questions
+- Clear Core/Honors topic labels
+- Worked answer feedback for every question
 - Local quiz progress, starred lessons, and starred questions
-- Downloadable copies of the official curriculum, exam-provided formula sheet, review, and key
-
-See [CURRICULUM_AUDIT.md](CURRICULUM_AUDIT.md) for the source-by-source coverage audit and question corrections.
 
 ## Run locally
 

@@ -31,7 +31,231 @@
     --font-body: 'Inter', sans-serif;
 }
 
-/* Official-curriculum alignment and Core/Honors labels. */
+/* Global readability repair -------------------------------------------------
+   Keep the application chrome stable, keep inline math at the surrounding
+   text size, and give genuinely long expressions their own scroll-safe row. */
+.sidebar {
+    flex: 0 0 270px;
+}
+
+.main-content {
+    min-width: 0;
+}
+
+.top-header {
+    flex: 0 0 80px;
+    min-height: 80px;
+    height: auto;
+    padding-block: 14px;
+    overflow: visible;
+}
+
+.screen-wrapper {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.lesson-section,
+.lesson-body-copy,
+.example-box,
+.mistake-box,
+.quick-check,
+.takeaways-box,
+.question-card,
+.question-text,
+.options-grid,
+.option-btn,
+.answer-feedback,
+.explanation-content {
+    min-width: 0;
+}
+
+.lesson-body-copy p,
+.lesson-body-copy li,
+.example-box p,
+.mistake-box p,
+.quick-check p,
+.takeaways-box li,
+.question-text,
+.option-btn,
+.answer-feedback-summary,
+.explanation-content {
+    line-height: 1.65;
+}
+
+.lesson-body-copy .katex,
+.lesson-glossary .katex,
+.example-box .katex,
+.mistake-box .katex,
+.quick-check .katex,
+.takeaways-box .katex,
+.question-text .katex,
+.option-btn .katex,
+.answer-feedback-summary .katex,
+.explanation-content .katex,
+.memory-anchor .katex {
+    font-size: 1em;
+}
+
+.lesson-body-copy .katex-display,
+.example-box .katex-display,
+.mistake-box .katex-display,
+.quick-check .katex-display,
+.question-text .katex-display,
+.option-btn .katex-display,
+.answer-feedback-summary .katex-display,
+.explanation-content .katex-display {
+    max-width: 100%;
+    margin: 0.75em 0;
+    padding: 0.2em 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.katex-long-inline {
+    display: block !important;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    margin: 0.65rem 0;
+    padding: 0.55rem 0.7rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 9px;
+    background: rgba(3, 4, 8, 0.38);
+    vertical-align: middle;
+}
+
+.memory-anchor {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    gap: 7px 16px;
+    max-width: 900px;
+    margin: 18px 0 24px;
+    padding: 15px 18px;
+}
+
+.memory-anchor-label {
+    grid-row: 1;
+    color: var(--accent-blue);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+}
+
+.memory-anchor-cues {
+    grid-column: 2;
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 18px;
+}
+
+.memory-anchor-cues strong {
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 14px;
+}
+
+.memory-anchor-cues > span {
+    min-width: 0;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.memory-anchor-tip {
+    grid-column: 1 / -1;
+    margin: 4px 0 0;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.memory-anchor-tip strong {
+    color: var(--accent-gold);
+}
+
+.formula-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 18px;
+    margin: 14px 0 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.formula-facts li {
+    padding: 9px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.formula-facts strong {
+    color: var(--accent-gold);
+}
+
+.example-equation {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.math-option-row {
+    display: block;
+    max-width: 100%;
+}
+
+.math-option-row + .math-option-row {
+    margin-top: 0.35rem;
+}
+
+@media (max-width: 720px) {
+    .sidebar {
+        flex: 0 0 auto;
+    }
+
+    .top-header {
+        flex: 0 0 auto;
+        min-height: 72px;
+        padding: 14px 18px;
+    }
+
+    .screen-wrapper {
+        overflow: visible;
+    }
+
+    .memory-anchor {
+        grid-template-columns: 1fr;
+        gap: 7px;
+    }
+
+    .memory-anchor-cues,
+    .memory-anchor-tip {
+        grid-column: 1;
+    }
+
+    .memory-anchor-cues {
+        display: grid;
+    }
+
+    .formula-facts {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Course coverage and Core/Honors labels. */
 .curriculum-alignment {
     display: flex;
     align-items: center;
@@ -2407,7 +2631,7 @@ html {
     border-color: rgba(255, 183, 3, 0.22);
 }
 
-/* Precalculus source packet and formula-sheet shortcuts. */
+/* Precalculus course coverage panel. */
 .exam-resources {
     display: flex;
     align-items: center;
@@ -2610,5 +2834,86 @@ html {
 
     .resource-links .btn {
         width: 100%;
+    }
+}
+
+/* Final cascade guarantees for the shared desktop and mobile shells. */
+.sidebar {
+    flex: 0 0 270px;
+}
+
+.main-content {
+    min-width: 0;
+}
+
+.top-header {
+    flex: 0 0 80px;
+    min-height: 80px;
+    height: auto;
+    padding-block: 14px;
+    overflow: visible;
+}
+
+.screen-wrapper {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.lesson-body-copy p,
+.lesson-body-copy li,
+.example-box p,
+.mistake-box p,
+.quick-check p,
+.takeaways-box li,
+.question-text,
+.option-btn,
+.answer-feedback-summary,
+.explanation-content {
+    line-height: 1.65;
+}
+
+.lesson-body-copy .katex,
+.lesson-glossary .katex,
+.example-box .katex,
+.mistake-box .katex,
+.quick-check .katex,
+.takeaways-box .katex,
+.question-text .katex,
+.option-btn .katex,
+.answer-feedback-summary .katex,
+.explanation-content .katex,
+.memory-anchor .katex {
+    font-size: 1em;
+}
+
+.memory-anchor {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    gap: 7px 16px;
+    margin: 18px 0 24px;
+    padding: 15px 18px;
+}
+
+@media (max-width: 720px) {
+    .sidebar {
+        flex: 0 0 auto;
+    }
+
+    .top-header {
+        flex: 0 0 auto;
+        min-height: 72px;
+        padding: 14px 18px;
+    }
+
+    .screen-wrapper {
+        overflow: visible;
+    }
+
+    .memory-anchor {
+        grid-template-columns: 1fr;
     }
 }

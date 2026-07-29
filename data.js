@@ -1,5 +1,4 @@
-// Honors Precalculus curriculum and final-exam review bank.
-// The review questions are adapted from the supplied 108-question packet.
+// Standalone Honors Precalculus lesson and practice bank.
 
 const definitions = {
     "Function fundamentals": "A function assigns exactly one output to each allowed input; its domain is the set of allowed inputs and its range is the set of outputs.",
@@ -29,11 +28,11 @@ const honorsReviewNumbers = new Set([
     30, 35, 36, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67,
     80, 81, 82, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 104, 105
 ]);
-const question = (id, topic, text, options, correctIndex, explanation, difficulty = "Final review", source = "", curriculumLevel = "Core") => ({
+const question = (id, topic, text, options, correctIndex, explanation, difficulty = "Practice", source = "", curriculumLevel = "Core") => ({
     id, topic, text, options, correctIndex, explanation, difficulty, source, curriculumLevel, definition: definitions[topic] || ""
 });
-const rq = (unit, number, topic, text, options, correctIndex, explanation, difficulty = "Final review") =>
-    question(`q${unit}_${number}`, topic, text, options, correctIndex, explanation, difficulty, `Final review #${number}`, honorsReviewNumbers.has(number) ? "Honors" : "Core");
+const rq = (unit, number, topic, text, options, correctIndex, explanation, difficulty = "Practice") =>
+    question(`q${unit}_${number}`, topic, text, options, correctIndex, explanation, difficulty, `Practice #${number}`, honorsReviewNumbers.has(number) ? "Honors" : "Core");
 
 const note = (title, body) => `<div class="example-box"><h4>${title}</h4>${body}</div>`;
 const warn = body => `<div class="mistake-box"><strong>Common mix-up:</strong> ${body}</div>`;
@@ -41,19 +40,18 @@ const check = (prompt, answer) => `<div class="quick-check"><strong>Quick check:
 
 export const precalculusData = {
     title: "Honors Precalculus",
-    subtitle: "Final exam review, guided notes, interactives, and worked practice",
-    reference: "Built from the supplied Honors Precalculus final review, answer key, and exam-provided formula sheet.",
+    subtitle: "Guided notes, interactives, and worked practice",
+    reference: "A standalone precalculus study guide with guided notes and practice questions.",
     curriculum: {
-        title: "Precalculus and Honors Precalculus Curriculum - Grades 10-12 - 2024",
-        officialUnits: 6,
-        note: "The district marks Honors-only content with an asterisk. This site labels the same material as Honors."
+        title: "Precalculus course coverage",
+        note: "More advanced material is labeled Honors."
     },
     units: [
         {
             id: "unit-1",
             title: "Functions, Rational Models, Exponents & Logs",
             subtitle: "Function foundations, polynomials, rational functions, exponentials, and logarithms",
-            curriculumUnit: "Official Units I-II",
+            curriculumUnit: "Functions & algebra",
             curriculumLevel: "Core + Honors",
             overview: "Analyze, transform, combine, and invert functions; then connect quadratic, polynomial, rational, exponential, and logarithmic forms to their graphs and models.",
             essentialQuestions: ["How do domain, range, symmetry, and transformations describe a function?", "How do composition and inverses connect functions?", "How do factors and polynomial theorems predict zeros and end behavior?", "How do rational, exponential, and logarithmic forms encode restrictions and models?"],
@@ -93,7 +91,7 @@ export const precalculusData = {
             id: "unit-2",
             title: "Trig Foundations & the Unit Circle",
             subtitle: "Angles, exact values, inverse trig, ranges, and applications",
-            curriculumUnit: "Official Unit III",
+            curriculumUnit: "Trigonometry",
             curriculumLevel: "Core",
             overview: "Move fluently between degrees and radians, connect circular motion to arc length, use exact trig values and inverse trig, and model right-triangle situations.",
             essentialQuestions: ["How does the unit circle encode sine and cosine?", "How are radian measure, arc length, and angular speed connected?", "Why do inverse trig functions use restricted ranges?", "How do angle of elevation and depression create triangles?"],
@@ -129,7 +127,7 @@ export const precalculusData = {
             id: "unit-3",
             title: "Trig Identities & Equations",
             subtitle: "Pythagorean identities, simplification, and multi-step solving",
-            curriculumUnit: "Official Unit III",
+            curriculumUnit: "Trigonometry",
             curriculumLevel: "Core + Honors",
             overview: "Use fundamental, sum/difference, and multiple-angle identities to simplify, verify, evaluate, and solve trigonometric expressions and equations.",
             essentialQuestions: ["Which identity changes the expression into a useful form?", "How is an identity verified without solving it?", "How do sum, difference, double-angle, and half-angle formulas create exact values?", "How do factoring and interval checks produce every solution?"],
@@ -137,9 +135,9 @@ export const precalculusData = {
             lessons: [
                 lesson("1. Identity toolkit", "Recognize reciprocal, quotient, and Pythagorean forms.", `
                     <div class="math-block">$$\\sin^2x+\\cos^2x=1,\\quad 1+\\tan^2x=\\sec^2x,\\quad 1+\\cot^2x=\\csc^2x$$</div>
-                    <p>Also use $\\tan x=\\sin x/\\cos x$, $\\cot x=\\cos x/\\sin x$, and the reciprocal identities. These are on the provided formula sheet, so the skill is choosing and applying them.</p>
+                    <p>Also use $\\tan x=\\sin x/\\cos x$, $\\cot x=\\cos x/\\sin x$, and the reciprocal identities. Focus on choosing the identity that matches the expression.</p>
                     ${check("Rewrite $1-\\csc^2x$.", "$-\\cot^2x$.")}
-                `, ["The formula sheet supplies the identities.", "Rewrite toward a common function.", "Keep domain restrictions in mind."]),
+                `, ["Recognize the identity before substituting.", "Rewrite toward a common function.", "Keep domain restrictions in mind."]),
                 lesson("2. Simplifying trig expressions", "Use factoring and common denominators before expanding blindly.", `
                     <p>Convert tangent, cotangent, secant, and cosecant to sine and cosine when a simplification is hidden. For sums of fractions, use a common denominator and look for $\\sin^2x+\\cos^2x$.</p>
                     ${note("Worked example", "<p>$\\frac{\\csc x}{\\tan x+\\cot x}=\\frac{1/\\sin x}{\\sin x/\\cos x+\\cos x/\\sin x}=\\frac{1/\\sin x}{1/(\\sin x\\cos x)}=\\cos x$.</p>")}
@@ -157,15 +155,23 @@ export const precalculusData = {
             id: "unit-4",
             title: "Trigonometric Graphs",
             subtitle: "Sine, cosine, tangent, cotangent, secant, and transformations",
-            curriculumUnit: "Official Unit III",
+            curriculumUnit: "Trigonometry",
             curriculumLevel: "Core",
             overview: "Read equations from graphs and graphs from equations using period, phase shift, midline, amplitude, zeros, and asymptotes, then build sinusoidal models.",
             essentialQuestions: ["How does the coefficient of $x$ change period?", "How does an inside shift move key points and asymptotes?", "How are secant and cosecant built from cosine and sine?", "How do extrema and cycle time determine a periodic model?"],
             vocabulary: [["Amplitude", "$|a|$ in $a\\sin(b(x-h))+k$ or $a\\cos(b(x-h))+k$."], ["Period", "$2\\pi/|b|$ for sine/cosine and $\\pi/|b|$ for tangent/cotangent."], ["Phase shift", "The horizontal shift $h$."], ["Midline", "The horizontal center line $y=k$."], ["Vertical asymptote", "A vertical line approached by tangent, cotangent, secant, or cosecant branches."]],
             lessons: [
                 lesson("1. Sine and cosine transformations", "Plot five key points per cycle.", `
-                    <p>For $y=a\\sin(b(x-h))+k$ or cosine, amplitude is $|a|$, period is $2\\pi/|b|$, phase shift is $h$, and midline is $y=k$. Divide a period into four equal steps.</p>
-                    ${note("Worked example", "<p>$-\\cos(2(x+\\pi/2))=-\\cos(2x+\\pi)=\\cos2x$, so it starts at a maximum and has period $\\pi$.</p>")}
+                    <p>Use the transformation form below for either sine or cosine.</p>
+                    <div class="math-block">$$y=a\\sin(b(x-h))+k \\qquad \\text{or} \\qquad y=a\\cos(b(x-h))+k$$</div>
+                    <ul class="formula-facts">
+                        <li><strong>Amplitude:</strong> $|a|$</li>
+                        <li><strong>Period:</strong> $2\\pi/|b|$</li>
+                        <li><strong>Phase shift:</strong> $h$</li>
+                        <li><strong>Midline:</strong> $y=k$</li>
+                    </ul>
+                    <p>Divide one period into four equal steps to place the five key points.</p>
+                    ${note("Worked example", "<div class=\"example-equation\">$$-\\cos(2(x+\\pi/2))=-\\cos(2x+\\pi)=\\cos(2x)$$</div><p>The graph starts at a maximum and has period $\\pi$.</p>")}
                     ${warn("Factor $b$ from the entire inside expression before reading the phase shift.")}
                 `, ["Period comes from $b$.", "The sign of $a$ reflects the graph.", "A shift moves every key point."]),
                 lesson("2. Tangent, cotangent, secant, and cosecant", "Use zeros and asymptotes as the skeleton.", `
@@ -183,7 +189,7 @@ export const precalculusData = {
             id: "unit-5",
             title: "Oblique Triangles",
             subtitle: "Law of Sines, Law of Cosines, and the ambiguous case",
-            curriculumUnit: "Official Unit III",
+            curriculumUnit: "Trigonometry",
             curriculumLevel: "Core",
             overview: "Solve non-right triangles from SSS, SAS, ASA/AAS, or SSA data, decide whether zero, one, or two triangles exist, and find area from SAS or SSS information.",
             essentialQuestions: ["Which law matches the information given?", "Why can SSA produce two triangles?", "How do angle and side checks reject impossible triangles?", "When should area use sine or Heron's Formula?"],
@@ -205,7 +211,7 @@ export const precalculusData = {
             id: "unit-6",
             title: "Complex Numbers, Binomials & Probability",
             subtitle: "Polar form, sigma notation, combinations, and binomial probability",
-            curriculumUnit: "Official Units III-IV",
+            curriculumUnit: "Complex numbers & probability",
             curriculumLevel: "Core + Honors",
             overview: "Represent and operate on complex numbers, expand binomials, evaluate factorial expressions, and distinguish counting, general probability, and binomial probability models.",
             essentialQuestions: ["How do rectangular and polar forms simplify different complex operations?", "How do binomial coefficients locate a requested term?", "When does order matter?", "How are complements, unions, intersections, and independence different?"],
@@ -232,7 +238,7 @@ export const precalculusData = {
             id: "unit-7",
             title: "Sequences & Series",
             subtitle: "Arithmetic, geometric, recursive, finite, and infinite sums",
-            curriculumUnit: "Official Unit IV",
+            curriculumUnit: "Sequences & series",
             curriculumLevel: "Core",
             overview: "Recognize arithmetic and geometric patterns, move between recursive and explicit rules, and sum finite or convergent infinite series.",
             essentialQuestions: ["Is the pattern driven by a difference or ratio?", "How does an explicit rule encode the first term?", "When does an infinite geometric series converge?"],
@@ -259,7 +265,7 @@ export const precalculusData = {
             id: "unit-8",
             title: "Conics, Parametric & Polar Curves",
             subtitle: "Conic equations, elimination, restrictions, coordinate conversion, and polar sketches",
-            curriculumUnit: "Official Unit V",
+            curriculumUnit: "Analytic geometry",
             curriculumLevel: "Honors only",
             overview: "Analyze circles, parabolas, ellipses, and hyperbolas; eliminate parameters without losing restrictions; and convert and sketch polar forms.",
             essentialQuestions: ["How does standard form reveal a conic's defining features?", "What restrictions remain after eliminating a parameter?", "How does a negative radius affect a polar point?", "How do symmetry and key values reveal a polar curve?"],
@@ -286,7 +292,7 @@ export const precalculusData = {
             id: "unit-9",
             title: "Limits & Introductory Derivatives",
             subtitle: "Factoring limits, derivative rules, tangents, and horizontal tangents",
-            curriculumUnit: "Official Unit VI",
+            curriculumUnit: "Limits & derivatives",
             curriculumLevel: "Core limits + Honors derivatives",
             overview: "Read one-sided and two-sided limits, evaluate limits algebraically, connect difference quotients to derivatives, and use first and second derivatives to describe tangents and concavity.",
             essentialQuestions: ["When do one-sided limits create a two-sided limit?", "When can a removable $0/0$ form be simplified?", "How does a difference quotient become an instantaneous slope?", "Which derivative rule matches the function structure?", "How do first and second derivatives describe a graph?"],
@@ -316,9 +322,7 @@ export const precalculusData = {
     ]
 };
 
-// Curriculum additions verified against the district's 2024 Precalculus/Honors Precalculus document.
-// The final-review packet is narrower than the full course, so these guided lessons close the gaps
-// without inventing additional "official review" questions.
+// Additional guided lessons complete the site's course coverage.
 const addLessons = (unitId, position, newLessons) => {
     const unit = precalculusData.units.find(candidate => candidate.id === unitId);
     if (!unit) return;
@@ -387,8 +391,8 @@ addLessons("unit-3", "end", [
         <div class="math-block">$$\\cos(u\\pm v)=\\cos u\\cos v\\mp\\sin u\\sin v$$</div>
         <p>The tangent formula is $\\tan(u\\pm v)=\\frac{\\tan u\\pm\\tan v}{1\\mp\\tan u\\tan v}$. Choose a decomposition such as $75^\\circ=45^\\circ+30^\\circ$ and preserve the sign pattern carefully.</p>
         ${check("What is $\\cos75^\\circ$?", "$\\frac{\\sqrt6-\\sqrt2}{4}$.")}
-    `, ["Cosine uses the opposite sign in the middle.", "Choose angles with known exact values.", "The formula sheet provides these identities."]),
-    lesson("Double-angle, half-angle, and product-to-sum formulas", "Apply the Honors multiple-angle identities supplied on the formula sheet.", `
+    `, ["Cosine uses the opposite sign in the middle.", "Choose angles with known exact values.", "Write the identity before substituting values."]),
+    lesson("Double-angle, half-angle, and product-to-sum formulas", "Apply multiple-angle identities accurately.", `
         <p>Use $\\sin2u=2\\sin u\\cos u$, the three equivalent forms of $\\cos2u$, and $\\tan2u=2\\tan u/(1-\\tan^2u)$. Half-angle square roots require a sign chosen from the quadrant of $u/2$.</p>
         <p>Product-to-sum formulas convert products such as $\\sin u\\cos v$ into sums of angles. They are useful for exact evaluation and later calculus work.</p>
         ${warn("The $\\pm$ in a half-angle formula is determined by the output angle's quadrant, not by the original ratio's sign alone.")}
@@ -456,7 +460,7 @@ addLessons("unit-9", "end", [
     `, ["Differentiate again for the second derivative.", "The sign of $f''$ determines concavity.", "Inflection requires a concavity change."], "Honors")
 ]);
 
-// Apply the district's asterisk convention to lessons already present in the packet-driven site.
+// Label the site's advanced lessons consistently.
 precalculusData.units.forEach(unit => {
     unit.lessons.forEach(currentLesson => {
         if (unit.id === "unit-8"
@@ -467,7 +471,7 @@ precalculusData.units.forEach(unit => {
     });
 });
 
-// Unit 1: final review 1-15.
+// Unit 1: practice questions 1-15.
 precalculusData.units[0].questions.push(
     rq(1,1,"Zeros and multiplicity","For $f(x)=-(x-3)^2(x+1)^3(x+5)$, which statement gives all zeros, multiplicities, and end behavior?",["$3(2),-1(3),-5(1)$; both ends down","$-3(2),1(3),5(1)$; both ends up","$3(2),-1(3),-5(1)$; left down, right up","$3(3),-1(2),-5(1)$; both ends down"],0,"The zeros reverse the signs inside the factors. The leading term is $-x^6$, an even degree with negative leading coefficient, so both ends approach $-\\infty$.","Core"),
     rq(1,2,"Rational functions","For $f(x)=\\frac{4x^2-8x-12}{x^2+5x-24}$, which complete description is correct?",["HA $y=4$; VA $x=-8$; domain excludes $-8,3$; hole $(3,16/11)$","HA $y=0$; VA $x=3$; domain excludes only $3$","HA $y=4$; VA $x=3$; hole $(-8,4)$","No asymptotes; domain is all real numbers"],0,"Factor to $\\frac{4(x-3)(x+1)}{(x+8)(x-3)}$. The canceled $x-3$ makes the hole; $x+8$ makes the VA; equal degrees give HA $y=4$.","Challenge"),
@@ -486,13 +490,13 @@ precalculusData.units[0].questions.push(
     rq(1,15,"Logarithms","Solve $\\ln(1-x)=\\ln(x^2+4x-23)$.",["$x=-8$","$x=3$","$x=-8$ or $3$","No real solution"],0,"Equating arguments gives $(x+8)(x-3)=0$. Only $x=-8$ keeps $1-x>0$ and the other log argument positive.")
 );
 
-// Unit 2: final review 16-25.
+// Unit 2: practice questions 16-25.
 precalculusData.units[1].questions.push(
     rq(2,16,"Unit circle","Convert $260^\\circ$ to radians.",["$13\\pi/9$","$13\\pi/18$","$26\\pi/9$","$5\\pi/6$"],0,"Multiply by $\\pi/180$ and reduce."),
     rq(2,17,"Unit circle","Convert $-5\\pi/12$ to degrees.",["$-75^\\circ$","$-150^\\circ$","$75^\\circ$","$-24^\\circ$"],0,"Multiply by $180/\\pi$."),
     rq(2,18,"Unit circle","Which list gives the exact values of $\\sin(-4\\pi/3),\\cos(7\\pi/6),\\sec(-\\pi),\\cot(13\\pi/6),\\csc(-5\\pi/4),\\tan690^\\circ,\\csc210^\\circ,\\sec300^\\circ$?",["$\\frac{\\sqrt3}{2},-\\frac{\\sqrt3}{2},-1,\\sqrt3,\\sqrt2,-\\frac{\\sqrt3}{3},-2,2$","$-\\frac{\\sqrt3}{2},\\frac{\\sqrt3}{2},1,\\frac{\\sqrt3}{3},-\\sqrt2,\\sqrt3,2,-2$","$\\frac12,-\\frac12,-1,1,\\sqrt2,\\frac{\\sqrt3}{3},-2,2$","$\\frac{\\sqrt3}{2},-\\frac{\\sqrt3}{2},1,\\sqrt3,-\\sqrt2,-\\frac{\\sqrt3}{3},2,2$"],0,"Reduce each angle, use its quadrant, then apply reciprocal identities where needed.","Challenge"),
     rq(2,19,"Trig equations","Which solution list is correct for the six equations in review #19?",["a) $135^\\circ,315^\\circ$; b) $\\pi/3,2\\pi/3$; c) $120^\\circ,240^\\circ$; d) $0$; e) $0,\\pi,2\\pi$; f) $0,\\pi$","a) $45^\\circ,225^\\circ$; b) $\\pi/6,5\\pi/6$; c) $60^\\circ,300^\\circ$; d) $2\\pi$; e) $\\pi$; f) $\\pi/2,3\\pi/2$","a) $135^\\circ$ only; b) $\\pi/3$ only; c) $240^\\circ$ only; d) $0,2\\pi$; e) $0,\\pi$; f) $0$","All six have no solution"],0,"Use reference angles, quadrant signs, and the exact endpoint rules stated for each equation.","Challenge"),
-    rq(2,20,"Unit circle","Which are the three Pythagorean identities?",["$\\sin^2x+\\cos^2x=1$, $1+\\tan^2x=\\sec^2x$, $1+\\cot^2x=\\csc^2x$","$\\sin x+\\cos x=1$, $\\tan x+1=\\sec x$, $\\cot x+1=\\csc x$","$\\sin^2x-\\cos^2x=1$, $\\sec^2x+\\tan^2x=1$, $\\csc^2x+\\cot^2x=1$","$\\sin2x+\\cos2x=1$, $\\tan2x+1=\\sec2x$, $\\cot2x+1=\\csc2x$"],0,"These are the standard Pythagorean identities listed on the provided formula sheet."),
+    rq(2,20,"Unit circle","Which are the three Pythagorean identities?",["$\\sin^2x+\\cos^2x=1$, $1+\\tan^2x=\\sec^2x$, $1+\\cot^2x=\\csc^2x$","$\\sin x+\\cos x=1$, $\\tan x+1=\\sec x$, $\\cot x+1=\\csc x$","$\\sin^2x-\\cos^2x=1$, $\\sec^2x+\\tan^2x=1$, $\\csc^2x+\\cot^2x=1$","$\\sin2x+\\cos2x=1$, $\\tan2x+1=\\sec2x$, $\\cot2x+1=\\csc2x$"],0,"These are the three standard Pythagorean identities."),
     rq(2,21,"Unit circle","Evaluate $\\arcsin(-1),\\arccos(-\\sqrt3/2),\\arctan(-\\sqrt3/3),\\arctan0$.",["$-\\pi/2,5\\pi/6,-\\pi/6,0$","$3\\pi/2,7\\pi/6,11\\pi/6,0$","$-\\pi/2,-\\pi/6,-\\pi/3,\\pi$","$\\pi/2,5\\pi/6,\\pi/6,0$"],0,"Inverse trig returns principal values in its restricted range."),
     rq(2,22,"Trig graphs","Give the ranges of $y=3\\sin x+1$, $y=\\tan x-2$, and $y=-4\\sec(5x-\\pi)-10$.",["$[-2,4]$; $(-\\infty,\\infty)$; $(-\\infty,-14]\\cup[-6,\\infty)$","$[-3,3]$; $[-2,2]$; $[-14,-6]$","$[-2,4]$; $(-2,\\infty)$; $(-\\infty,-6]$","$[1,4]$; all real; $[-14,\\infty)$"],0,"Sine uses midline plus/minus amplitude; tangent has all-real range; transformed secant leaves the open gap $(-14,-6)$."),
     rq(2,23,"Unit circle","An angle's terminal side passes through $(6\\sqrt5,-6\\sqrt{15})$. Find an angle in $0<\\theta\\le2\\pi$.",["$5\\pi/3$","$\\pi/3$","$4\\pi/3$","$11\\pi/6$"],0,"The ratios are $\\cos\\theta=1/2$ and $\\sin\\theta=-\\sqrt3/2$, placing the angle in Quadrant IV."),
@@ -500,7 +504,7 @@ precalculusData.units[1].questions.push(
     rq(2,25,"Unit circle","A plane sights a house at a $15^\\circ$ angle of depression from 1450 ft altitude. How far is the plane from the house?",["About $5602.37$ ft","About $1501.16$ ft","About $388.52$ ft","About $5411.11$ ft"],0,"The line of sight is the hypotenuse: $\\sin15^\\circ=1450/d$.")
 );
 
-// Unit 3: final review 26-30.
+// Unit 3: practice questions 26-30.
 precalculusData.units[2].questions.push(
     rq(3,26,"Trig identities","Simplify $1-2\\csc^2x+\\csc^4x$.",["$\\cot^4x$","$-\\cot^4x$","$\\csc^4x$","$\\sin^2x$"],0,"It is $(1-\\csc^2x)^2=(-\\cot^2x)^2=\\cot^4x$."),
     rq(3,27,"Trig identities","Simplify $\\frac{\\csc x}{\\tan x+\\cot x}$.",["$\\cos x$","$\\sin x$","$\\sec x$","$1$"],0,"The denominator becomes $1/(\\sin x\\cos x)$; dividing leaves $\\cos x$."),
@@ -608,11 +612,10 @@ precalculusData.units[8].questions.push(
     rq(9,90,"Derivatives","Find the tangent line to $f(x)=x^4-5x^3-20$ at $x=-2$.",["$y-36=-92(x+2)$","$y+36=92(x-2)$","$y-36=92(x+2)$","$y=-92x+148$"],0,"$f(-2)=36$ and $f'(-2)=4(-2)^3-15(-2)^2=-92$."),
     rq(9,91,"Derivatives","Find the tangent line to $g(\\theta)=6\\cos\\theta$ at $\\theta=5\\pi/3$.",["$y-3=3\\sqrt3(\\theta-5\\pi/3)$","$y+3=-3\\sqrt3(\\theta+5\\pi/3)$","$y-3=-3\\sqrt3(\\theta-5\\pi/3)$","$y=6\\cos(5\\pi/3)$"],0,"The point is $(5\\pi/3,3)$ and $g'(5\\pi/3)=-6\\sin(5\\pi/3)=3\\sqrt3$."),
     rq(9,92,"Derivatives","Where does $f(x)=2x^3-3x^2-12x+5$ have horizontal tangents?",["$(2,-15)$ and $(-1,12)$","$(2,0)$ and $(-1,0)$","$(0,5)$ only","$(-2,-15)$ and $(1,12)$"],0,"Solve $f'(x)=6(x-2)(x+1)=0$, then evaluate the original function."),
-    rq(9,93,"Derivatives","Where does $g(x)=\\cos x\\sin x$ have horizontal tangents on $[0,2\\pi)$?",["$(\\pi/4,1/2),(3\\pi/4,-1/2),(5\\pi/4,1/2),(7\\pi/4,-1/2)$","$(0,0),(\\pi,0)$","$(\\pi/2,0),(3\\pi/2,0)$","$(\\pi/4,1),(5\\pi/4,-1)$"],0,"$g'(x)=\\cos^2x-\\sin^2x=\\cos2x$. Set it to zero and substitute into $g$.")
+    rq(9,93,"Derivatives","Where does $g(x)=\\cos x\\sin x$ have horizontal tangents on $[0,2\\pi)$?",["<span class=\"math-option-row\">$(\\pi/4,1/2),(3\\pi/4,-1/2)$</span><span class=\"math-option-row\">$(5\\pi/4,1/2),(7\\pi/4,-1/2)$</span>","$(0,0),(\\pi,0)$","$(\\pi/2,0),(3\\pi/2,0)$","$(\\pi/4,1),(5\\pi/4,-1)$"],0,"$g'(x)=\\cos^2x-\\sin^2x=\\cos2x$. Set it to zero and substitute into $g$.")
 );
 
-// The packet places #66-74 in one graph-matching block, but the district curriculum
-// classifies those graphs by family. Move them to their actual instructional homes.
+// Keep graph-matching questions with their actual instructional families.
 const questionHomes = new Map([
     [66, "unit-8"], [67, "unit-8"],
     [68, "unit-1"], [69, "unit-1"], [70, "unit-1"], [71, "unit-1"], [72, "unit-1"]
