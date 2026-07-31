@@ -1,7 +1,7 @@
 // Main Application Controller Module
-import { precalculusData } from './data.js?v=precalculus-5';
-import { initReviewPanel } from './review.js?v=precalculus-5';
-import { initPracticePanel } from './practice.js?v=precalculus-5';
+import { precalculusData } from './data.js?v=precalculus-6';
+import { initReviewPanel } from './review.js?v=precalculus-6';
+import { initPracticePanel } from './practice.js?v=precalculus-6';
 import {
     getProgressState,
     getStats,
@@ -13,7 +13,7 @@ import {
     signOutProgress,
     subscribeProgress,
     subscribeSyncState
-} from './progress.js?v=precalculus-5';
+} from './progress.js?v=precalculus-6';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Navigation / Routing DOM Elements
@@ -65,6 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
         modeSelect: document.getElementById('quiz-mode-select'),
         lengthSelect: document.getElementById('quiz-length-select'),
         btnStart: document.getElementById('btn-start-quiz'),
+        resumeCard: document.getElementById('quiz-resume-card'),
+        resumeDetail: document.getElementById('quiz-resume-detail'),
+        btnResume: document.getElementById('btn-resume-quiz'),
+        btnDiscard: document.getElementById('btn-discard-quiz'),
         progressText: document.getElementById('quiz-progress-text'),
         progressFill: document.getElementById('quiz-progress-fill'),
         questionTopic: document.getElementById('question-topic-label'),
@@ -330,17 +334,16 @@ document.addEventListener('DOMContentLoaded', () => {
         latestSyncState = state;
         const signedIn = Boolean(state.user);
         const isStarting = state.status === 'starting';
-        const localOnly = state.status === 'local';
 
         syncStatus.dataset.status = state.status;
         syncStatusTitle.innerText = signedIn ? 'Cloud sync on' : 'Saved on this device';
         syncStatusDetail.innerText = state.message;
 
-        accountButton.disabled = accountActionBusy || isStarting || localOnly || (state.status === 'error' && !signedIn);
+        accountButton.disabled = accountActionBusy || isStarting || (state.status === 'error' && !signedIn);
         accountButton.dataset.signedIn = String(signedIn);
-        accountName.innerText = signedIn ? state.user.displayName : (localOnly ? 'Local progress' : 'Sign in with Google');
-        accountSyncLabel.innerText = signedIn ? state.message : (localOnly ? 'Saved in this browser' : 'Sync phone, PC, and more');
-        accountButton.title = signedIn ? `Signed in as ${state.user.email}. Click to sign out.` : (localOnly ? 'Progress is stored in this browser' : 'Sign in to sync progress across devices');
+        accountName.innerText = signedIn ? state.user.displayName : 'Sign in with Google';
+        accountSyncLabel.innerText = signedIn ? state.message : 'Sync phone, PC, and more';
+        accountButton.title = signedIn ? `Signed in as ${state.user.email}. Click to sign out.` : 'Sign in to sync progress across devices';
 
         if (signedIn && state.user.photoURL) {
             accountAvatar.style.backgroundImage = `url("${state.user.photoURL}")`;
@@ -375,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset Data Event
     btnResetData.addEventListener('click', async () => {
-        if (confirm('Delete all quiz scores, XP, lesson history, and starred lessons and questions from this browser? This action is permanent.')) {
+        if (confirm('Delete all quiz scores, XP, lesson history, unfinished quiz, and starred lessons and questions from this device and your synced account? This action is permanent.')) {
             await resetProgress();
             alert('Your Precalculus progress has been cleared.');
         }

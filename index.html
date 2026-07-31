@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <link rel="stylesheet" href="styles.css?v=precalculus-5">
+    <link rel="stylesheet" href="styles.css?v=precalculus-6">
 </head>
 <body>
     <a class="skip-link" href="#lesson-content-container">Skip to lesson content</a>
@@ -211,6 +211,14 @@
                         </div>
                         <p id="practice-bank-note" class="form-hint practice-bank-note" aria-live="polite">The full bank is selected by default; choose Quick review for a shorter session.</p>
                         <button id="btn-start-quiz" class="btn btn-primary">Start practice</button>
+                        <div id="quiz-resume-card" class="quiz-resume-card" hidden>
+                            <strong>Unfinished quiz saved</strong>
+                            <span id="quiz-resume-detail">Your place is saved on this device.</span>
+                            <div class="quiz-resume-actions">
+                                <button id="btn-resume-quiz" class="btn btn-accent" type="button">Resume quiz</button>
+                                <button id="btn-discard-quiz" class="btn btn-secondary" type="button">Discard saved quiz</button>
+                            </div>
+                        </div>
                         <p class="form-hint">Tip: read the explanation after every question, even when you are correct.</p>
                     </div>
 
@@ -289,6 +297,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-    <script type="module" src="app.js?v=precalculus-5"></script>
+    <script type="module" src="app.js?v=precalculus-6"></script>
 </body>
 </html>
