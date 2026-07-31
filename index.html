@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <link rel="stylesheet" href="styles.css?v=precalculus-6">
+    <link rel="stylesheet" href="styles.css?v=precalculus-7">
 </head>
 <body>
     <a class="skip-link" href="#lesson-content-container">Skip to lesson content</a>
@@ -234,10 +234,15 @@
                                 <span id="question-topic-label" class="question-topic-tag">Core skill</span>
                                 <span id="question-difficulty-label" class="question-difficulty-tag">Core</span>
                                 <span id="question-source-label" class="question-source-tag" hidden>Practice</span>
+                                <div class="question-action-buttons">
                                 <button id="btn-star-question" class="question-star-button" type="button" aria-pressed="false" aria-label="Star this question for review">
                                     <span aria-hidden="true">☆</span>
-                                    <span class="question-star-label">Star question</span>
+                                <span class="question-star-label">Star question</span>
                                 </button>
+                                <button id="btn-ignore-question" class="question-ignore-button" type="button" aria-pressed="false" aria-label="Ignore this question">
+                                    <span class="question-ignore-label">Ignore question</span>
+                                </button>
+                                </div>
                             </div>
                             <div class="question-text" id="question-text-content"></div>
                             <div class="options-container" id="question-options-container"></div>
@@ -297,6 +302,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-    <script type="module" src="app.js?v=precalculus-6"></script>
+    <script type="module" src="app.js?v=precalculus-7"></script>
 </body>
 </html>

@@ -10,6 +10,7 @@ A standalone static study site modeled on the sibling `algebra-2` project. It in
 - Clear Core/Honors topic labels
 - Worked answer feedback for every question
 - Local-first quiz progress, starred lessons, and starred questions
+- Ignored-question list for setting aside questions and reviewing them later
 - Resumable unfinished quizzes, including saved question order and answers
 - Optional Google sign-in for cloud sync across devices (shared with Algebra 2)
 

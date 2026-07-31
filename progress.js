@@ -41,6 +41,7 @@ export function createDefaultProgressState() {
         stats: createDefaultStats(),
         starredLessons: [],
         starredQuestions: [],
+        ignoredQuestions: [],
         lessonHistory: {},
         lastLesson: null,
         activeQuiz: null,
@@ -136,6 +137,9 @@ export function normalizeProgressState(rawState) {
     const starredQuestions = Array.isArray(raw.starredQuestions)
         ? [...new Set(raw.starredQuestions.filter(id => normalizeQuestionId(id)))]
         : [];
+    const ignoredQuestions = Array.isArray(raw.ignoredQuestions)
+        ? [...new Set(raw.ignoredQuestions.filter(id => normalizeQuestionId(id)))]
+        : [];
     const lessonHistory = {};
 
     if (raw.lessonHistory && typeof raw.lessonHistory === 'object') {
@@ -159,6 +163,7 @@ export function normalizeProgressState(rawState) {
         stats: normalizeStats(raw.stats || raw),
         starredLessons,
         starredQuestions,
+        ignoredQuestions,
         lessonHistory,
         lastLesson,
         activeQuiz: normalizeQuizSession(raw.activeQuiz),
@@ -213,6 +218,7 @@ export function mergeProgressStates(firstState, secondState) {
         stats: mergeStats(first.stats, second.stats),
         starredLessons: [...new Set([...first.starredLessons, ...second.starredLessons])],
         starredQuestions: [...new Set([...first.starredQuestions, ...second.starredQuestions])],
+        ignoredQuestions: [...new Set([...first.ignoredQuestions, ...second.ignoredQuestions])],
         lessonHistory,
         lastLesson: secondLastViewed >= firstLastViewed ? second.lastLesson : first.lastLesson,
         activeQuiz,
@@ -558,6 +564,23 @@ export function setQuestionStarred(questionId, starred) {
 
 export function toggleQuestionStar(questionId) {
     return setQuestionStarred(questionId, !isQuestionStarred(questionId));
+}
+
+export function isQuestionIgnored(questionId) {
+    return progressState.ignoredQuestions.includes(String(questionId));
+}
+
+export function setQuestionIgnored(questionId, ignored) {
+    const id = normalizeQuestionId(questionId);
+    if (!id) return false;
+
+    updateState(draft => {
+        const questions = new Set(draft.ignoredQuestions);
+        if (ignored) questions.add(id);
+        else questions.delete(id);
+        draft.ignoredQuestions = [...questions];
+    });
+    return ignored;
 }
 
 export function markLessonViewed(unitId, lessonIndex) {

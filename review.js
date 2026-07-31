@@ -1,12 +1,12 @@
 // Guided lesson and unit overview manager.
-import { precalculusData } from './data.js?v=precalculus-6';
-import { initSandbox } from './interactive.js?v=precalculus-6';
+import { precalculusData } from './data.js?v=precalculus-7';
+import { initSandbox } from './interactive.js?v=precalculus-7';
 import {
     isLessonStarred,
     markLessonViewed,
     subscribeProgress,
     toggleLessonStar
-} from './progress.js?v=precalculus-6';
+} from './progress.js?v=precalculus-7';
 
 const sandboxDescriptions = {
     "unit-1": "Compare a rational function with its asymptotes and removable hole.",

@@ -1,7 +1,7 @@
 // Main Application Controller Module
-import { precalculusData } from './data.js?v=precalculus-6';
-import { initReviewPanel } from './review.js?v=precalculus-6';
-import { initPracticePanel } from './practice.js?v=precalculus-6';
+import { precalculusData } from './data.js?v=precalculus-7';
+import { initReviewPanel } from './review.js?v=precalculus-7';
+import { initPracticePanel } from './practice.js?v=precalculus-7';
 import {
     getProgressState,
     getStats,
@@ -13,7 +13,7 @@ import {
     signOutProgress,
     subscribeProgress,
     subscribeSyncState
-} from './progress.js?v=precalculus-6';
+} from './progress.js?v=precalculus-7';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Navigation / Routing DOM Elements
@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         questionDifficulty: document.getElementById('question-difficulty-label'),
         questionSource: document.getElementById('question-source-label'),
         btnStarQuestion: document.getElementById('btn-star-question'),
+        btnIgnoreQuestion: document.getElementById('btn-ignore-question'),
         questionText: document.getElementById('question-text-content'),
         optionsContainer: document.getElementById('question-options-container'),
         btnSubmit: document.getElementById('btn-submit-answer'),
