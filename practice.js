@@ -1,13 +1,15 @@
 // Practice section and quiz engine.
-import { precalculusData } from './data.js?v=precalculus-6';
+import { precalculusData } from './data.js?v=precalculus-7';
 import {
     clearActiveQuiz,
+    isQuestionIgnored,
     isQuestionStarred,
     recordQuizResult,
+    setQuestionIgnored,
     setActiveQuiz,
     subscribeProgress,
     toggleQuestionStar
-} from './progress.js?v=precalculus-6';
+} from './progress.js?v=precalculus-7';
 
 export function initPracticePanel(elems, onStatsUpdate) {
     let currentQuestions = [];
@@ -15,7 +17,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
     let score = 0;
     let selectedOptionIndex = -1;
     let answerLog = [];
-    let latestProgress = { starredQuestions: [] };
+    let latestProgress = { starredQuestions: [], ignoredQuestions: [] };
     let currentMode = 'cumulative';
     let currentSessionLength = 'all';
     let currentAnswered = false;
@@ -26,6 +28,11 @@ export function initPracticePanel(elems, onStatsUpdate) {
     starredOption.value = 'starred';
     starredOption.innerText = 'Starred questions (0)';
     elems.modeSelect.appendChild(starredOption);
+    const ignoredOption = document.createElement('option');
+    ignoredOption.value = 'ignored';
+    ignoredOption.innerText = 'Ignored questions (0)';
+    ignoredOption.disabled = true;
+    elems.modeSelect.appendChild(ignoredOption);
     precalculusData.units.forEach(unit => {
         const option = document.createElement('option');
         option.value = unit.id;
@@ -51,6 +58,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
     elems.btnSubmit.addEventListener('click', submitAnswer);
     elems.btnNext.addEventListener('click', nextQuestion);
     elems.btnStarQuestion?.addEventListener('click', toggleCurrentQuestionStar);
+    elems.btnIgnoreQuestion?.addEventListener('click', toggleCurrentQuestionIgnore);
     elems.btnRetry.addEventListener('click', () => {
         elems.summaryPanel.style.display = 'none';
         elems.setupPanel.style.display = 'block';
@@ -58,7 +66,18 @@ export function initPracticePanel(elems, onStatsUpdate) {
     subscribeProgress(progress => {
         latestProgress = progress;
         starredOption.innerText = `Starred questions (${progress.starredQuestions.length})`;
-        if (elems.runnerPanel.style.display !== 'none') updateQuestionStarButton();
+        ignoredOption.innerText = `Ignored questions (${progress.ignoredQuestions.length})`;
+        ignoredOption.disabled = progress.ignoredQuestions.length === 0;
+        if (bankNote) {
+            const ignoredNote = progress.ignoredQuestions.length
+                ? ` ${progress.ignoredQuestions.length} ignored question${progress.ignoredQuestions.length === 1 ? '' : 's'} will stay out of new sessions.`
+                : '';
+            bankNote.innerText = `Question bank: ${bankSize} practice questions across ${precalculusData.units.length} study units. The full set follows numbered order; Quick review is balanced and randomized.${ignoredNote}`;
+        }
+        if (elems.runnerPanel.style.display !== 'none') {
+            updateQuestionStarButton();
+            updateQuestionIgnoreButton();
+        }
         renderResumePrompt(progress);
     });
 
@@ -74,6 +93,8 @@ export function initPracticePanel(elems, onStatsUpdate) {
             ? 'Complete practice set'
             : session.mode === 'starred'
                 ? 'Starred questions'
+                : session.mode === 'ignored'
+                    ? 'Ignored questions'
                 : session.mode.replace(/^unit-/, 'Unit ');
         const answeredLabel = session.currentAnswered ? 'Answer saved' : 'Your current answer is waiting';
         elems.resumeDetail.innerText = `${modeLabel} · Question ${session.currentIndex + 1} of ${session.questions.length} · ${answeredLabel}`;
@@ -95,18 +116,22 @@ export function initPracticePanel(elems, onStatsUpdate) {
         currentSessionLength = sessionLength;
         currentAnswered = false;
         startedAt = Date.now();
+        const ignoredIds = new Set(latestProgress.ignoredQuestions);
 
         if (mode === 'cumulative') {
             currentQuestions = buildBalancedCumulativeSet(sessionLength === 'quick' ? 16 : null);
         } else if (mode === 'starred') {
             const starredIds = new Set(latestProgress.starredQuestions);
-            const starredQuestions = allQuestions().filter(item => starredIds.has(item.id));
+            const starredQuestions = allQuestions().filter(item => starredIds.has(item.id) && !ignoredIds.has(item.id));
             currentQuestions = shuffle(starredQuestions);
+            if (sessionLength === 'quick') currentQuestions = currentQuestions.slice(0, 16);
+        } else if (mode === 'ignored') {
+            currentQuestions = shuffle(allQuestions().filter(item => ignoredIds.has(item.id)));
             if (sessionLength === 'quick') currentQuestions = currentQuestions.slice(0, 16);
         } else {
             const unit = precalculusData.units.find(candidate => candidate.id === mode);
             const unitQuestions = unit
-                ? shuffle(unit.questions).map(item => ({ ...item, unitId: unit.id }))
+                ? shuffle(unit.questions.filter(item => !ignoredIds.has(item.id))).map(item => ({ ...item, unitId: unit.id }))
                 : [];
             currentQuestions = sessionLength === 'quick'
                 ? unitQuestions.slice(0, 16)
@@ -117,8 +142,10 @@ export function initPracticePanel(elems, onStatsUpdate) {
 
         if (currentQuestions.length === 0) {
             alert(mode === 'starred'
-                ? 'No questions are starred yet. Star a question during practice, then return here to review it.'
-                : 'No questions are available for this unit yet.');
+                ? 'No available questions are starred yet. Star a question during practice, or restore one from the ignored list.'
+                : mode === 'ignored'
+                    ? 'Your ignored list is empty. Use Ignore question during practice to put questions here.'
+                    : 'No non-ignored questions are available for this selection yet.');
             return;
         }
 
@@ -175,19 +202,29 @@ export function initPracticePanel(elems, onStatsUpdate) {
     }
 
     function buildBalancedCumulativeSet(limit = null) {
+        const available = availableQuestions();
         if (!limit) {
-            return allQuestions().sort((a, b) => sourceNumber(a) - sourceNumber(b));
+            return available.sort((a, b) => sourceNumber(a) - sourceNumber(b));
         }
-        const firstQuestionFromEachUnit = precalculusData.units.map(unit => {
-            const item = shuffle(unit.questions)[0];
-            return item ? { ...item, unitId: unit.id } : null;
+        const availableByUnit = precalculusData.units.map(unit => ({
+            unit,
+            questions: available.filter(item => item.unitId === unit.id)
+        })).filter(group => group.questions.length);
+        const firstQuestionFromEachUnit = availableByUnit.map(group => {
+            const item = shuffle(group.questions)[0];
+            return item ? { ...item, unitId: group.unit.id } : null;
         }).filter(Boolean);
         const selectedIds = new Set(firstQuestionFromEachUnit.map(item => item.id));
-        const remaining = precalculusData.units.flatMap(unit => shuffle(unit.questions)
+        const remaining = availableByUnit.flatMap(group => shuffle(group.questions)
             .filter(item => !selectedIds.has(item.id))
-            .map(item => ({ ...item, unitId: unit.id })));
+            .map(item => ({ ...item, unitId: group.unit.id })));
         const balancedQuestions = shuffle([...firstQuestionFromEachUnit, ...remaining]);
         return limit ? balancedQuestions.slice(0, Math.min(limit, balancedQuestions.length)) : balancedQuestions;
+    }
+
+    function availableQuestions() {
+        const ignoredIds = new Set(latestProgress.ignoredQuestions);
+        return allQuestions().filter(item => !ignoredIds.has(item.id));
     }
 
     function sourceNumber(question) {
@@ -251,6 +288,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
             elems.questionSource.innerText = currentQuestion.source || '';
         }
         updateQuestionStarButton();
+        updateQuestionIgnoreButton();
 
         elems.questionText.innerHTML = currentQuestion.text;
         elems.optionsContainer.innerHTML = '';
@@ -296,6 +334,40 @@ export function initPracticePanel(elems, onStatsUpdate) {
         const label = elems.btnStarQuestion.querySelector('.question-star-label');
         if (icon) icon.textContent = starred ? '★' : '☆';
         if (label) label.textContent = starred ? 'Starred' : 'Star question';
+    }
+
+    function updateQuestionIgnoreButton() {
+        const currentQuestion = currentQuestions[currentIndex];
+        if (!elems.btnIgnoreQuestion || !currentQuestion) return;
+        const ignored = isQuestionIgnored(currentQuestion.id);
+        elems.btnIgnoreQuestion.classList.toggle('active', ignored);
+        elems.btnIgnoreQuestion.setAttribute('aria-pressed', String(ignored));
+        elems.btnIgnoreQuestion.setAttribute('aria-label', ignored ? 'Restore this question from the ignored list' : 'Ignore this question');
+        elems.btnIgnoreQuestion.title = ignored ? 'Restore this question from the ignored list' : 'Ignore this question and move on';
+        elems.btnIgnoreQuestion.disabled = currentAnswered;
+        const label = elems.btnIgnoreQuestion.querySelector('.question-ignore-label');
+        if (label) label.textContent = ignored ? 'Restore question' : 'Ignore question';
+    }
+
+    function toggleCurrentQuestionIgnore() {
+        const currentQuestion = currentQuestions[currentIndex];
+        if (!currentQuestion || currentAnswered) return;
+        setQuestionIgnored(currentQuestion.id, !isQuestionIgnored(currentQuestion.id));
+        skipCurrentQuestion();
+    }
+
+    function skipCurrentQuestion() {
+        if (!currentQuestions.length) return;
+        currentQuestions.splice(currentIndex, 1);
+        selectedOptionIndex = -1;
+        currentAnswered = false;
+        if (!currentQuestions.length) {
+            finishQuiz();
+            return;
+        }
+        currentIndex = Math.min(currentIndex, currentQuestions.length - 1);
+        saveQuizSession();
+        loadQuestion();
     }
 
     function selectOption(index) {
@@ -360,6 +432,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
         elems.btnSubmit.style.display = 'none';
         elems.btnNext.style.display = 'block';
         elems.btnNext.innerText = currentIndex === currentQuestions.length - 1 ? 'Finish quiz' : 'Next question';
+        updateQuestionIgnoreButton();
     }
 
     function nextQuestion() {
@@ -378,10 +451,10 @@ export function initPracticePanel(elems, onStatsUpdate) {
         elems.runnerPanel.style.display = 'none';
         elems.summaryPanel.style.display = 'block';
         const total = currentQuestions.length;
-        const accuracy = Math.round((score / total) * 100);
+        const accuracy = total ? Math.round((score / total) * 100) : 0;
         const xp = score * 10;
         elems.summaryScore.innerText = `${score}/${total}`;
-        elems.summaryPercent.innerText = `${accuracy}% accuracy`;
+        elems.summaryPercent.innerText = total ? `${accuracy}% accuracy` : 'No questions answered';
         elems.summaryXp.innerText = xp;
         saveDiagnosticsData(score, total, xp);
         clearActiveQuiz();
