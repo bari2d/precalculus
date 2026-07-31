@@ -2173,6 +2173,43 @@ html {
     margin-bottom: 18px;
 }
 
+.quiz-resume-card {
+    display: flex;
+    width: min(100%, 520px);
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 15px 17px;
+    border: 1px solid rgba(0, 245, 212, 0.24);
+    border-radius: 13px;
+    background: linear-gradient(135deg, rgba(0, 245, 212, 0.07), rgba(0, 245, 255, 0.035));
+    text-align: center;
+}
+
+.quiz-resume-card[hidden] {
+    display: none;
+}
+
+.quiz-resume-card strong {
+    color: var(--accent-green);
+    font-family: var(--font-heading);
+    font-size: 15px;
+}
+
+.quiz-resume-card > span {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.quiz-resume-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 3px;
+}
+
 .lesson-body-copy .katex,
 .lesson-body-copy .katex * {
     word-break: normal;

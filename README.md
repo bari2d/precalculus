@@ -9,7 +9,9 @@ A standalone static study site modeled on the sibling `algebra-2` project. It in
 - 108 cumulative practice questions
 - Clear Core/Honors topic labels
 - Worked answer feedback for every question
-- Local quiz progress, starred lessons, and starred questions
+- Local-first quiz progress, starred lessons, and starred questions
+- Resumable unfinished quizzes, including saved question order and answers
+- Optional Google sign-in for cloud sync across devices (shared with Algebra 2)
 
 ## Run locally
 
@@ -21,4 +23,4 @@ python -m http.server 4173
 
 Then open `http://127.0.0.1:4173/`.
 
-Progress is saved in the current browser with local storage. No backend or build step is required.
+Progress is saved locally first. Sign in with Google from the account button to sync Precalculus progress across devices; it uses the same account service as the Algebra 2 site while keeping each course in its own cloud field. No build step is required.
