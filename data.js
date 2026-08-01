@@ -171,7 +171,8 @@ export const precalculusData = {
                         <li><strong>Midline:</strong> $y=k$</li>
                     </ul>
                     <p>Divide one period into four equal steps to place the five key points.</p>
-                    ${note("Worked example", "<div class=\"example-equation\">$$-\\cos(2(x+\\pi/2))=-\\cos(2x+\\pi)=\\cos(2x)$$</div><p>The graph starts at a maximum and has period $\\pi$.</p>")}
+                    ${note("Worked example", "<p>To simplify a shifted cosine, first distribute the inside coefficient, then use $\\cos(u+\\pi)=-\\cos u$:</p><div class=\"example-equation\">$$-\\cos\\left(2\\left(x+\\frac{\\pi}{2}\\right)\\right)=-\\cos(2x+\\pi)=-(-\\cos2x)=\\cos2x.$$</div><p>So this is a cosine graph with period $\\pi$ and a maximum at $x=0$. The outside negative and the $+\\pi$ shift cancel each other.</p>")}
+                    ${check("What basic graph matches $-\\cos(2(x+\\pi/2))$?", "A cosine graph with period $\\pi$ and a maximum at $x=0$.")}
                     ${warn("Factor $b$ from the entire inside expression before reading the phase shift.")}
                 `, ["Period comes from $b$.", "The sign of $a$ reflects the graph.", "A shift moves every key point."]),
                 lesson("2. Tangent, cotangent, secant, and cosecant", "Use zeros and asymptotes as the skeleton.", `
