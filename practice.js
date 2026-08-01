@@ -122,7 +122,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
             currentQuestions = buildBalancedCumulativeSet(sessionLength === 'quick' ? 16 : null);
         } else if (mode === 'starred') {
             const starredIds = new Set(latestProgress.starredQuestions);
-            const starredQuestions = allQuestions().filter(item => starredIds.has(item.id) && !ignoredIds.has(item.id));
+            const starredQuestions = allQuestions().filter(item => starredIds.has(item.id));
             currentQuestions = shuffle(starredQuestions);
             if (sessionLength === 'quick') currentQuestions = currentQuestions.slice(0, 16);
         } else if (mode === 'ignored') {
@@ -142,7 +142,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
 
         if (currentQuestions.length === 0) {
             alert(mode === 'starred'
-                ? 'No available questions are starred yet. Star a question during practice, or restore one from the ignored list.'
+                ? 'No available questions are starred yet. Star a question during practice.'
                 : mode === 'ignored'
                     ? 'Your ignored list is empty. Use Ignore question during practice to put questions here.'
                     : 'No non-ignored questions are available for this selection yet.');
