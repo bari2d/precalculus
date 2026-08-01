@@ -23,9 +23,17 @@ export function initSandbox(canvas, unitId, controlsContainer) {
         slider('Target value', 'target', -1, 1, 0.5, 0.1);
         slider('Frequency b', 'frequency', 1, 4, 1, 1, 0);
     } else if (unitId === 'unit-4') {
-        params = { a: 2, b: 1, h: 0, k: 0 };
-        slider('Amplitude a', 'a', -4, 4, 2, 0.5);
-        slider('Period factor b', 'b', 0.5, 4, 1, 0.5);
+        params = { family: 'sine', a: 2, b: 1, h: 0, k: 0 };
+        select('Trig family', 'family', [
+            { value: 'sine', label: 'Sine' },
+            { value: 'cosine', label: 'Cosine' },
+            { value: 'tangent', label: 'Tangent' },
+            { value: 'cotangent', label: 'Cotangent' },
+            { value: 'secant', label: 'Secant' },
+            { value: 'cosecant', label: 'Cosecant' }
+        ]);
+        slider('Signed coefficient a', 'a', -4, 4, 2, 0.5);
+        slider('Input scale b', 'b', 0.5, 4, 1, 0.5);
         slider('Phase shift h', 'h', -3, 3, 0, 0.25);
         slider('Midline k', 'k', -3, 3, 0, 0.5);
     } else if (unitId === 'unit-5') {
@@ -211,7 +219,7 @@ export function initSandbox(canvas, unitId, controlsContainer) {
         }
         ctx.stroke();
         const solutions = [];
-        for (let i = 0; i <= 800; i++) {
+        for (let i = 0; i < 800; i++) {
             const x = 2 * Math.PI * i / 800;
             const error = Math.abs(Math.sin(params.frequency * x) - params.target);
             if (error < .008 && !solutions.some(s => Math.abs(s - x) < .04)) solutions.push(x);
@@ -220,15 +228,48 @@ export function initSandbox(canvas, unitId, controlsContainer) {
             ctx.fillStyle = '#ff758f'; ctx.beginPath(); ctx.arc(x0 + x * scaleX, y0 - params.target * scaleY, 5, 0, Math.PI * 2); ctx.fill();
         });
         label(`sin(${params.frequency.toFixed(0)}x) = ${params.target.toFixed(1)}`, 18, 24);
-        label(`${solutions.length} intersection${solutions.length === 1 ? '' : 's'} on [0, 2π]`, 18, height - 15, '#aeb8c8');
+        label(`${solutions.length} intersection${solutions.length === 1 ? '' : 's'} on [0, 2π)`, 18, height - 15, '#aeb8c8');
     }
 
     function drawTrigGraph() {
         const scale = 38, x0 = width / 2, y0 = height / 2;
-        ctx.strokeStyle = '#00f5d4'; ctx.setLineDash([5, 5]); line(0, y0 - params.k * scale, width, y0 - params.k * scale); ctx.setLineDash([]);
-        plot(x => params.a * Math.sin(params.b * (x - params.h)) + params.k, '#9d4edd', scale, x0, y0);
-        label(`y = ${params.a.toFixed(1)} sin(${params.b.toFixed(1)}(x - ${params.h.toFixed(2)})) + ${params.k.toFixed(1)}`, 14, 24);
-        label(`amplitude ${Math.abs(params.a).toFixed(1)}  •  period ${(2 * Math.PI / params.b).toFixed(2)}`, 14, 46, '#aeb8c8');
+        const trigFunctions = {
+            sine: Math.sin,
+            cosine: Math.cos,
+            tangent: Math.tan,
+            cotangent: value => Math.cos(value) / Math.sin(value),
+            secant: value => 1 / Math.cos(value),
+            cosecant: value => 1 / Math.sin(value)
+        };
+        const shortNames = { sine: 'sin', cosine: 'cos', tangent: 'tan', cotangent: 'cot', secant: 'sec', cosecant: 'csc' };
+        const partnerZero = ['tangent', 'secant'].includes(params.family) ? Math.PI / 2 : 0;
+        const hasAsymptotes = ['tangent', 'cotangent', 'secant', 'cosecant'].includes(params.family);
+        const shortPeriod = ['tangent', 'cotangent'].includes(params.family);
+        const period = (shortPeriod ? Math.PI : 2 * Math.PI) / params.b;
+
+        ctx.strokeStyle = '#00f5d4';
+        ctx.setLineDash([5, 5]);
+        line(0, y0 - params.k * scale, width, y0 - params.k * scale);
+        if (hasAsymptotes) {
+            ctx.strokeStyle = 'rgba(255,183,3,.65)';
+            for (let n = -10; n <= 10; n++) {
+                const asymptote = params.h + (partnerZero + n * Math.PI) / params.b;
+                const px = x0 + asymptote * scale;
+                if (px >= 0 && px <= width) line(px, 0, px, height);
+            }
+        }
+        ctx.setLineDash([]);
+
+        const trig = trigFunctions[params.family];
+        plot(x => params.a * trig(params.b * (x - params.h)) + params.k, '#9d4edd', scale, x0, y0);
+        label(`y = ${params.a.toFixed(1)} ${shortNames[params.family]}(${params.b.toFixed(1)}(x - ${params.h.toFixed(2)})) + ${params.k.toFixed(1)}`, 14, 24);
+        const feature = ['sine', 'cosine'].includes(params.family)
+            ? `amplitude ${Math.abs(params.a).toFixed(1)}`
+            : ['secant', 'cosecant'].includes(params.family)
+                ? `range outside ${params.k.toFixed(1)} ± ${Math.abs(params.a).toFixed(1)}`
+                : `no amplitude`;
+        label(`${feature}  •  period ${period.toFixed(2)}`, 14, 46, '#aeb8c8');
+        if (hasAsymptotes) label('gold dashed lines: vertical asymptotes', 14, 68, '#ffb703');
     }
 
     function drawTriangle() {

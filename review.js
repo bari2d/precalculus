@@ -1,12 +1,12 @@
 // Guided lesson and unit overview manager.
-import { precalculusData } from './data.js?v=precalculus-7';
-import { initSandbox } from './interactive.js?v=precalculus-7';
+import { precalculusData } from './data.js?v=precalculus-8';
+import { initSandbox } from './interactive.js?v=precalculus-8';
 import {
     isLessonStarred,
     markLessonViewed,
     subscribeProgress,
     toggleLessonStar
-} from './progress.js?v=precalculus-7';
+} from './progress.js?v=precalculus-8';
 
 const sandboxDescriptions = {
     "unit-1": "Compare a rational function with its asymptotes and removable hole.",
@@ -49,6 +49,7 @@ export function initReviewPanel({
 }) {
     let currentUnit = null;
     let currentLessonIndex = 0;
+    let currentGuideQuestion = null;
 
     unitSelect.innerHTML = '';
     precalculusData.units.forEach(unit => {
@@ -134,6 +135,13 @@ export function initReviewPanel({
         currentLessonIndex = index;
         const currentLesson = currentUnit.lessons[index];
         const starred = isLessonStarred(currentUnit.id, index);
+        const guideQuestion = currentGuideQuestion?.guideUnitId === currentUnit.id
+            && currentGuideQuestion.guideLesson === currentLesson.title
+            ? currentGuideQuestion
+            : null;
+        const coveredQuestions = precalculusData.units
+            .flatMap(unit => unit.questions)
+            .filter(question => question.guideUnitId === currentUnit.id && question.guideLesson === currentLesson.title);
         lessonSelect.value = String(index);
         lessonProgress.innerText = `Lesson ${index + 1} of ${currentUnit.lessons.length}`;
         lessonLevelBadge.innerText = currentLesson.level === 'Honors' ? 'Honors' : 'Core';
@@ -165,6 +173,14 @@ export function initReviewPanel({
                         </button>
                     </div>
                 </div>
+                ${guideQuestion ? `
+                    <aside id="guide-question-${guideQuestion.id}" class="question-guide-target" tabindex="-1" aria-label="Study guide for ${guideQuestion.source}">
+                        <span class="question-guide-kicker">Guide for ${guideQuestion.source}</span>
+                        <strong>${guideQuestion.topic}</strong>
+                        <div class="question-guide-prompt">${guideQuestion.text}</div>
+                        <p>Use lesson below for concepts, formulas, worked examples, and common mistakes needed for this question.</p>
+                    </aside>
+                ` : ''}
                 <aside class="lesson-glossary" aria-label="Key words for this lesson">
                     <div class="lesson-glossary-heading"><span>Before you start</span><strong>Key words in this lesson</strong></div>
                     <dl>${glossary.map(([term, definition]) => `<div><dt>${term}</dt><dd>${definition}</dd></div>`).join('')}</dl>
@@ -179,6 +195,12 @@ export function initReviewPanel({
                 </aside>
                 <div class="lesson-body-copy">${currentLesson.content}</div>
                 <div class="takeaways-box"><strong>Remember</strong><ul>${currentLesson.takeaways.map(item => `<li>${item}</li>`).join('')}</ul></div>
+                ${coveredQuestions.length ? `
+                    <aside class="lesson-practice-connections" aria-label="Practice questions covered by this lesson">
+                        <span>Practice questions covered</span>
+                        <div>${coveredQuestions.map(question => `<strong>${question.source}</strong>`).join('')}</div>
+                    </aside>
+                ` : ''}
                 <div class="lesson-end-navigation">
                     <button type="button" class="btn btn-small btn-secondary lesson-end-prev">Previous lesson</button>
                     <span>Page ${index + 1} of ${currentUnit.lessons.length}</span>
@@ -199,6 +221,13 @@ export function initReviewPanel({
         contentContainer.scrollTop = 0;
         renderMath(contentContainer);
         markLessonViewed(currentUnit.id, index);
+        if (guideQuestion) {
+            requestAnimationFrame(() => {
+                const target = document.getElementById(`guide-question-${guideQuestion.id}`);
+                target?.scrollIntoView({ block: 'start' });
+                target?.focus({ preventScroll: true });
+            });
+        }
     }
 
     function refreshStarUi() {
@@ -242,8 +271,26 @@ export function initReviewPanel({
         return title.replace(/^\d+\.\s*/, '');
     }
 
+    function openQuestionGuide(questionId) {
+        for (const sourceUnit of precalculusData.units) {
+            const question = sourceUnit.questions.find(candidate => candidate.id === questionId);
+            if (!question?.guideLesson || !question.guideUnitId) continue;
+            const guideUnit = precalculusData.units.find(unit => unit.id === question.guideUnitId);
+            const lessonIndex = guideUnit?.lessons.findIndex(currentLesson => currentLesson.title === question.guideLesson) ?? -1;
+            if (!guideUnit || lessonIndex < 0) return false;
+            currentGuideQuestion = question;
+            loadUnit(guideUnit.id, lessonIndex);
+            return true;
+        }
+        return false;
+    }
+
     return {
-        openLesson(unitId, lessonIndex = 0) { loadUnit(unitId, lessonIndex); },
+        openLesson(unitId, lessonIndex = 0) {
+            currentGuideQuestion = null;
+            loadUnit(unitId, lessonIndex);
+        },
+        openQuestionGuide,
         destroy() { stopProgressSubscription(); }
     };
 }

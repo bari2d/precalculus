@@ -1,5 +1,5 @@
 // Practice section and quiz engine.
-import { precalculusData } from './data.js?v=precalculus-7';
+import { precalculusData } from './data.js?v=precalculus-8';
 import {
     clearActiveQuiz,
     isQuestionIgnored,
@@ -9,7 +9,7 @@ import {
     setActiveQuiz,
     subscribeProgress,
     toggleQuestionStar
-} from './progress.js?v=precalculus-7';
+} from './progress.js?v=precalculus-8';
 
 export function initPracticePanel(elems, onStatsUpdate) {
     let currentQuestions = [];
@@ -287,6 +287,7 @@ export function initPracticePanel(elems, onStatsUpdate) {
             elems.questionSource.hidden = !currentQuestion.source;
             elems.questionSource.innerText = currentQuestion.source || '';
         }
+        updateQuestionGuideLink();
         updateQuestionStarButton();
         updateQuestionIgnoreButton();
 
@@ -314,6 +315,23 @@ export function initPracticePanel(elems, onStatsUpdate) {
             const answer = answerLog.find(item => item.question.id === currentQuestion.id);
             showAnswerFeedback(answer?.isCorrect ?? selectedOptionIndex === currentQuestion.correctIndex);
         }
+    }
+
+    function updateQuestionGuideLink() {
+        const currentQuestion = currentQuestions[currentIndex];
+        if (!elems.questionGuideLink || !currentQuestion) return;
+        const hasGuide = Boolean(currentQuestion.guideUnitId && currentQuestion.guideLesson);
+        elems.questionGuideLink.hidden = !hasGuide;
+        if (!hasGuide) return;
+
+        const url = new URL(window.location.href);
+        url.search = '';
+        url.hash = '';
+        url.searchParams.set('guide', currentQuestion.id);
+        url.hash = `guide-question-${currentQuestion.id}`;
+        elems.questionGuideLink.href = url.toString();
+        elems.questionGuideLink.setAttribute('aria-label', `Open the study guide for ${currentQuestion.source || 'this question'} in a new tab`);
+        elems.questionGuideLink.title = `Open ${currentQuestion.guideLesson} in a new tab`;
     }
 
     function toggleCurrentQuestionStar() {

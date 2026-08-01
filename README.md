@@ -4,9 +4,11 @@ A standalone static study site modeled on the sibling `algebra-2` project. It in
 
 **Live site:** https://bari2d.github.io/precalculus/
 
-- 9 focused study units and 49 guided lessons
+- 9 focused study units and 55 guided lessons
 - 9 interactive canvas sandboxes
 - 108 cumulative practice questions
+- Audited coverage of every practice question and official Core/Honors curriculum objective
+- A **To guide** link on every question that opens its exact lesson in a new tab
 - Clear Core/Honors topic labels
 - Worked answer feedback for every question
 - Local-first quiz progress, starred lessons, and starred questions

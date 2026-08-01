@@ -1,7 +1,7 @@
 // Main Application Controller Module
-import { precalculusData } from './data.js?v=precalculus-7';
-import { initReviewPanel } from './review.js?v=precalculus-7';
-import { initPracticePanel } from './practice.js?v=precalculus-7';
+import { precalculusData } from './data.js?v=precalculus-8';
+import { initReviewPanel } from './review.js?v=precalculus-8';
+import { initPracticePanel } from './practice.js?v=precalculus-8';
 import {
     getProgressState,
     getStats,
@@ -13,7 +13,7 @@ import {
     signOutProgress,
     subscribeProgress,
     subscribeSyncState
-} from './progress.js?v=precalculus-7';
+} from './progress.js?v=precalculus-8';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Navigation / Routing DOM Elements
@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         questionTopic: document.getElementById('question-topic-label'),
         questionDifficulty: document.getElementById('question-difficulty-label'),
         questionSource: document.getElementById('question-source-label'),
+        questionGuideLink: document.getElementById('question-guide-link'),
         btnStarQuestion: document.getElementById('btn-star-question'),
         btnIgnoreQuestion: document.getElementById('btn-ignore-question'),
         questionText: document.getElementById('question-text-content'),
@@ -403,6 +404,11 @@ document.addEventListener('DOMContentLoaded', () => {
         nextButton: nextLessonButton,
         lessonLevelBadge
     });
+
+    const requestedGuideQuestion = new URLSearchParams(window.location.search).get('guide');
+    if (requestedGuideQuestion && reviewController.openQuestionGuide(requestedGuideQuestion)) {
+        routeTo('review-screen');
+    }
 
     // 2. Initialize Quiz Engine
     initPracticePanel(practiceElems, syncStats);
